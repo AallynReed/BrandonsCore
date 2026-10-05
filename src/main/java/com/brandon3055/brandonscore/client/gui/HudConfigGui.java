@@ -12,6 +12,7 @@ import com.brandon3055.brandonscore.client.hud.HudData;
 import com.brandon3055.brandonscore.client.hud.HudManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -114,11 +115,11 @@ public class HudConfigGui implements GuiProvider {
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            boolean captured = super.mouseClicked(mouseX, mouseY, button);
+        public boolean mouseClicked(MouseButtonEvent event) {
+            boolean captured = super.mouseClicked(event);
             if (!captured && isMouseOver()) {
                 dragging = true;
-                element.startMoving(mouseX, mouseY);
+                element.startMoving(event.x(), event.y());
                 return true;
             }
             return captured;
@@ -133,12 +134,12 @@ public class HudConfigGui implements GuiProvider {
         }
 
         @Override
-        public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        public boolean mouseReleased(MouseButtonEvent event) {
             if (dragging) {
                 element.stopMoving();
                 dragging = false;
             }
-            return super.mouseReleased(mouseX, mouseY, button);
+            return super.mouseReleased(event);
         }
 
         private void drawBackground(GuiRender render, double x, double y, double w, double h, float partialTicks, int colour) {

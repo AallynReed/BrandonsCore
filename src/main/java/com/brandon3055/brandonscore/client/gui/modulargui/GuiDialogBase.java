@@ -2,6 +2,7 @@ package com.brandon3055.brandonscore.client.gui.modulargui;
 
 import codechicken.lib.gui.modular.elements.GuiManipulable;
 import codechicken.lib.gui.modular.lib.geometry.GuiParent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
 
 import static codechicken.lib.gui.modular.lib.geometry.Constraint.dynamic;
@@ -31,11 +32,11 @@ public class GuiDialogBase extends GuiManipulable {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button, boolean consumed) {
-        if (closeOnOutsideClick && !getContentElement().getRectangle().contains(mouseX, mouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
+        if (closeOnOutsideClick && !getContentElement().getRectangle().contains(event.x(), event.y())) {
             close();
         }
-        return super.mouseClicked(mouseX, mouseY, button, consumed) || blockOutsideClicks;
+        return super.mouseClicked(event, consumed) || blockOutsideClicks;
     }
 
     public void close() {

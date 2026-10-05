@@ -6,6 +6,7 @@ import codechicken.lib.gui.modular.lib.Constraints;
 import codechicken.lib.gui.modular.lib.TextState;
 import codechicken.lib.gui.modular.lib.geometry.Axis;
 import codechicken.lib.gui.modular.lib.geometry.GuiParent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -156,8 +157,8 @@ public class GuiListDialog<T> extends GuiElement<GuiListDialog<T>> {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button, boolean consumed) {
-        consumed = super.mouseClicked(mouseX, mouseY, button, consumed);
+    public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
+        consumed = super.mouseClicked(event, consumed);
         if (isMouseOver() || consumed) {
             if (actionOnClick) {
                 if (consumed && closeOnItemClicked) {
@@ -174,8 +175,8 @@ public class GuiListDialog<T> extends GuiElement<GuiListDialog<T>> {
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button, boolean consumed) {
-        consumed = super.mouseReleased(mouseX, mouseY, button, consumed);
+    public boolean mouseReleased(MouseButtonEvent event, boolean consumed) {
+        consumed = super.mouseReleased(event, consumed);
         if (isMouseOver() || consumed) {
             if (!actionOnClick) {
                 if (consumed && closeOnItemClicked) {

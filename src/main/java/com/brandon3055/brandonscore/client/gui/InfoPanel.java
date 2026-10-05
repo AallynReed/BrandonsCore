@@ -9,6 +9,7 @@ import codechicken.lib.gui.modular.lib.geometry.Align;
 import codechicken.lib.gui.modular.lib.geometry.Borders;
 import codechicken.lib.gui.modular.lib.geometry.ConstrainedGeometry;
 import codechicken.lib.gui.modular.lib.geometry.GuiParent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -185,7 +186,7 @@ public class InfoPanel extends GuiElement<InfoPanel> {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event) {
         if (isMouseOver()) {
             toggleExpanded();
             mc().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
