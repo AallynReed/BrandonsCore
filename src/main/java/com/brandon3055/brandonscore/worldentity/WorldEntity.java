@@ -79,7 +79,7 @@ public abstract class WorldEntity {
     @Nullable
     public static WorldEntity readWorldEntity(CompoundTag nbt) {
         String id = nbt.getStringOr("id", "");
-        return Optional.ofNullable(WorldEntityHandler.REGISTRY.get(Identifier.parse(id)))
+        return Optional.ofNullable(WorldEntityHandler.REGISTRY.getValue(Identifier.parse(id)))
                 .map(e -> {
                     try {
                         return e.create();
