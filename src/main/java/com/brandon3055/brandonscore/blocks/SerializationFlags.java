@@ -1,12 +1,12 @@
 package com.brandon3055.brandonscore.blocks;
 
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import com.brandon3055.brandonscore.lib.IValueHashable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 /**
  * Created by brandon3055 on 18/12/19.

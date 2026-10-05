@@ -3,10 +3,10 @@ package com.brandon3055.brandonscore.lib.entityfilter;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.Locale;
 

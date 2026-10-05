@@ -1,10 +1,10 @@
 package com.brandon3055.brandonscore.capability;
 
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.capabilities.ItemCapability;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

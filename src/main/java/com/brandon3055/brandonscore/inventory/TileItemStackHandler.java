@@ -1,5 +1,6 @@
 package com.brandon3055.brandonscore.inventory;
 
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 /**
  * Created by brandon3055 on 13/9/19.
  */
-public class TileItemStackHandler extends ItemStackHandler {
+public class TileItemStackHandler extends ItemStackHandler implements INBTSerializable<CompoundTag> {
 
     private final BlockEntity tile;
     private BiPredicate<Integer, ItemStack> stackValidator = null;

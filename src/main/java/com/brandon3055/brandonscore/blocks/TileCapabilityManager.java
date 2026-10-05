@@ -4,6 +4,7 @@ import codechicken.lib.data.MCDataInput;
 import codechicken.lib.packet.PacketCustom;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import com.brandon3055.brandonscore.network.BCoreNetwork;
 import com.brandon3055.brandonscore.utils.DataUtils;
 import net.minecraft.core.Direction;
@@ -13,7 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

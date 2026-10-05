@@ -2,11 +2,11 @@ package com.brandon3055.brandonscore.lib.datamanager;
 
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

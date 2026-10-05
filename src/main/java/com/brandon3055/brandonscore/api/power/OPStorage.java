@@ -4,13 +4,13 @@ import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
+import com.brandon3055.brandonscore.lib.INBTSerializable;
 import com.brandon3055.brandonscore.lib.IValueHashable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 
