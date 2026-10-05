@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
  * Created by brandon3055 on 4/2/21
@@ -27,15 +26,12 @@ public class PlayerMixin {
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(
             method = "tryToStartFallFlying",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/entity/player/Player;getItemBySlot(Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;",
-                    shift = At.Shift.AFTER
-            ),
-            locals = LocalCapture.CAPTURE_FAILHARD,
+            at = @At("HEAD"),
             cancellable = true
     )
-    public void tryToStartFallFlying(CallbackInfoReturnable<Boolean> cir, ItemStack itemStack) {
+    public void tryToStartFallFlying(CallbackInfoReturnable<Boolean> cir) {
+        if (getThis().onGround() || getThis().isFallFlying() || getThis().isInWater() || getThis().hasEffect(MobEffects.LEVITATION)) return;
+        ItemStack itemStack = getThis().getItemBySlot(EquipmentSlot.CHEST);
         if (itemStack.getItem() instanceof ElytraEnabledItem item && item.canElytraFlyBC(itemStack, getThis())) {
             getThis().startFallFlying();
             cir.setReturnValue(true);

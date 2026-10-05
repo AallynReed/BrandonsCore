@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
  * Created by brandon3055 on 4/2/21
@@ -38,14 +37,14 @@ public abstract class LivingEntityMixin implements EntityAccessor{
     @Inject(
             method = "updateFallFlying",
             at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/entity/LivingEntity;getItemBySlot(Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;",
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/LivingEntity;checkFallDistanceAccumulation()V",
                     shift = At.Shift.AFTER
             ),
-            locals = LocalCapture.CAPTURE_FAILHARD,
             cancellable = true
     )
-    private void updateFallFlying(CallbackInfo ci, boolean flag, ItemStack itemstack) {
+    private void updateFallFlying(CallbackInfo ci) {
+        ItemStack itemstack = getThis().getItemBySlot(EquipmentSlot.CHEST);
         if (itemstack.getItem() instanceof ElytraEnabledItem item && item.canElytraFlyBC(itemstack, getThis()) && item.elytraFlightTickBC(itemstack, getThis(), getThis().getFallFlyingTicks())) {
             ci.cancel();
         }
