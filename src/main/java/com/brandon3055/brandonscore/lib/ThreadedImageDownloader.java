@@ -3,10 +3,9 @@ package com.brandon3055.brandonscore.lib;
 import com.brandon3055.brandonscore.handlers.FileHandler;
 import com.brandon3055.brandonscore.utils.LogHelperBC;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureContents;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -54,21 +53,15 @@ public class ThreadedImageDownloader extends SimpleTexture {
     }
 
     private void upload(NativeImage imageIn) {
-        TextureUtil.prepareImage(this.getId(), imageIn.getWidth(), imageIn.getHeight());
-        imageIn.upload(0, 0, 0, true);
+        try (imageIn) {
+            this.doLoad(imageIn);
+        }
     }
 
     private void setImage(NativeImage nativeImageIn) {
         Minecraft.getInstance().execute(() -> {
             this.textureUploaded = true;
-            if (!RenderSystem.isOnRenderThread()) {
-                RenderSystem.recordRenderCall(() -> {
-                    this.upload(nativeImageIn);
-                });
-            } else {
-                this.upload(nativeImageIn);
-            }
-
+            this.upload(nativeImageIn);
         });
 
         dlLocation.width = nativeImageIn.getWidth();
@@ -80,14 +73,20 @@ public class ThreadedImageDownloader extends SimpleTexture {
 
 
     @Override
-    public void load(ResourceManager manager) throws IOException {
+    public void apply(TextureContents contents) {
         if (!this.textureUploaded) {
             synchronized (this) {
-                super.load(manager);
+                super.apply(contents);
                 this.textureUploaded = true;
             }
+        } else {
+            contents.close();
         }
+    }
 
+    @Override
+    public TextureContents loadContents(ResourceManager manager) throws IOException {
+        TextureContents contents = super.loadContents(manager);
         if (this.future == null) {
             NativeImage nativeimage;
             if (this.cacheFile != null && this.cacheFile.isFile()) {
@@ -144,6 +143,7 @@ public class ThreadedImageDownloader extends SimpleTexture {
                 }, Util.backgroundExecutor());
             }
         }
+        return contents;
     }
 
     @Nullable

@@ -50,7 +50,7 @@ public class DLRSCache {
 
             ThreadedImageDownloader downloader = new ThreadedImageDownloader(cache, url, DOWNLOADING_TEXTURE);
             downloader.setDlLocation(resourceLocation);
-            texturemanager.register(resourceLocation.resource, downloader);
+            texturemanager.registerAndLoad(resourceLocation.resource, downloader);
 
             resourceCache.put(key, resourceLocation);
         }
