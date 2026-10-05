@@ -18,6 +18,7 @@ import com.brandon3055.brandonscore.lib.IRSSwitchable.RSMode;
 import com.brandon3055.brandonscore.lib.datamanager.*;
 import com.brandon3055.brandonscore.network.BCoreNetwork;
 import com.brandon3055.brandonscore.utils.EnergyUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -35,6 +36,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -153,9 +156,10 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        dataManager.readSyncNBT(provider, pkt.getTag());
-        readExtraNBT(provider, pkt.getTag());
+    public void onDataPacket(Connection net, ValueInput input) {
+        CompoundTag nbt = input.read(MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseThrow();
+        dataManager.readSyncNBT(input.lookup(), nbt);
+        readExtraNBT(input.lookup(), nbt);
     }
 
     public PacketCustom createServerBoundPacket(int id) {
@@ -363,15 +367,20 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
     public void readExtraTileAndStack(HolderLookup.Provider provider, CompoundTag nbt) {}
 
     @Override
-    protected final void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.saveAdditional(nbt, provider);
+    protected final void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        HolderLookup.Provider provider = level.registryAccess();
+        CompoundTag nbt = new CompoundTag();
         dataManager.writeToNBT(provider, nbt);
         writeExtraNBT(provider, nbt);
+        output.store(nbt);
     }
 
     @Override
-    protected final void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
+    protected final void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        HolderLookup.Provider provider = input.lookup();
+        CompoundTag nbt = input.read(MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseThrow();
         dataManager.readFromNBT(provider, nbt);
         readExtraNBT(provider, nbt);
         onTileLoaded();
