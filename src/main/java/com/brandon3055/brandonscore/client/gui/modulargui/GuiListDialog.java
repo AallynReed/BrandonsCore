@@ -46,7 +46,6 @@ public class GuiListDialog<T> extends GuiElement<GuiListDialog<T>> {
         Constraints.bind(backgroundFunc.apply(dialog), dialog);
 
         dialog.list = new GuiList<C>(dialog)
-                .setZStacking(false)
                 .constrain(TOP, relative(dialog.get(TOP), 3))
                 .constrain(LEFT, relative(dialog.get(LEFT), 3))
                 .constrain(RIGHT, relative(dialog.get(RIGHT), () -> dialog.list.hiddenSize() > 0 ? -8D : -3D))
@@ -94,7 +93,6 @@ public class GuiListDialog<T> extends GuiElement<GuiListDialog<T>> {
         Constraints.bind(backgroundFunc.apply(dialog), dialog);
 
         dialog.list = new GuiList<C>(dialog)
-                .setZStacking(false)
                 .constrain(TOP, relative(dialog.get(TOP), 3))
                 .constrain(LEFT, relative(dialog.get(LEFT), 3))
                 .constrain(RIGHT, relative(dialog.get(RIGHT), () -> dialog.list.hiddenSize() > 0 ? -8D : -3D))
