@@ -9,8 +9,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.covers1624.quack.util.CrashLock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -32,9 +32,9 @@ import static com.brandon3055.brandonscore.BrandonsCore.MODID;
 public class HudManager {
     private static final CrashLock LOCK = new CrashLock("Already Initialized");
 
-    public static final ResourceKey<Registry<AbstractHudElement>> HUD_TYPE = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(MODID, "hud_elements"));
+    public static final ResourceKey<Registry<AbstractHudElement>> HUD_TYPE = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(MODID, "hud_elements"));
     public static Registry<AbstractHudElement> HUD_REGISTRY;
-    protected static Map<ResourceLocation, AbstractHudElement> hudElements = new HashMap<>();
+    protected static Map<Identifier, AbstractHudElement> hudElements = new HashMap<>();
 
     public static void init(IEventBus modBus) {
         LOCK.lock();
@@ -95,26 +95,26 @@ public class HudManager {
 
     private static void onLoadComplete(FMLLoadCompleteEvent event) {
         hudElements.clear();
-        for (ResourceLocation key : HUD_REGISTRY.keySet()) {
+        for (Identifier key : HUD_REGISTRY.keySet()) {
             hudElements.put(key, HUD_REGISTRY.get(key));
         }
         HudData.loadSettings();
     }
 
     public static void registerBuiltIn(RegisterEvent event) {
-        event.register(HUD_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "item_hud"), () -> new HudDataElement(new Vector2(0, 0.20494), true, false).setEnabled(false));
-        event.register(HUD_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "block_hud"), () -> new HudDataElement(new Vector2(0, 0.04593), false, true).setEnabled(false));
-        event.register(HUD_TYPE, ResourceLocation.fromNamespaceAndPath(MODID, "block_item_hud"), () -> new HudDataElement(new Vector2(0.99023, 0.72438), true, true));
+        event.register(HUD_TYPE, Identifier.fromNamespaceAndPath(MODID, "item_hud"), () -> new HudDataElement(new Vector2(0, 0.20494), true, false).setEnabled(false));
+        event.register(HUD_TYPE, Identifier.fromNamespaceAndPath(MODID, "block_hud"), () -> new HudDataElement(new Vector2(0, 0.04593), false, true).setEnabled(false));
+        event.register(HUD_TYPE, Identifier.fromNamespaceAndPath(MODID, "block_item_hud"), () -> new HudDataElement(new Vector2(0.99023, 0.72438), true, true));
     }
 
     //Utils, getters, setters
 
-    public static Map<ResourceLocation, AbstractHudElement> getHudElements() {
+    public static Map<Identifier, AbstractHudElement> getHudElements() {
         return ImmutableMap.copyOf(hudElements);
     }
 
     @Nullable
-    public static AbstractHudElement getHudElement(ResourceLocation key) {
+    public static AbstractHudElement getHudElement(Identifier key) {
         return hudElements.get(key);
     }
 }

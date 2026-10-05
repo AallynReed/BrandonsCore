@@ -9,7 +9,7 @@ import com.brandon3055.brandonscore.client.BCClientEventHandler;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.covers1624.quack.util.CrashLock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
@@ -68,7 +68,7 @@ public class BCShaders {
     }
 
     private static void onRegisterShaders(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, "energy_bar"), DefaultVertexFormat.POSITION), e -> {
+        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "energy_bar"), DefaultVertexFormat.POSITION), e -> {
             energyBarShader = (CCShaderInstance) e;
             energyBarTime = energyBarShader.getUniform("time");
             energyBarCharge = energyBarShader.getUniform("charge");
@@ -78,7 +78,7 @@ public class BCShaders {
             energyBarShader.onApply(() -> energyBarTime.glUniform1f(BCClientEventHandler.elapsedTicks / 10F));
         });
 
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, "position_color_tex_alpha0"), DefaultVertexFormat.POSITION_TEX_COLOR), e -> {
+        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "position_color_tex_alpha0"), DefaultVertexFormat.POSITION_TEX_COLOR), e -> {
             posColourTexAlpha0 = (CCShaderInstance) e;
         });
     }

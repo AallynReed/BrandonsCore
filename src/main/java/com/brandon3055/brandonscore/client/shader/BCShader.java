@@ -3,7 +3,7 @@ package com.brandon3055.brandonscore.client.shader;
 import codechicken.lib.render.shader.CCShaderInstance;
 import codechicken.lib.render.shader.CCUniform;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 public class BCShader<T extends BCShader<T>> {
 
-    private final ResourceLocation location;
+    private final Identifier location;
     private final VertexFormat format;
     private final List<Consumer<T>> applyCallbacks = new LinkedList<>();
 
@@ -27,7 +27,7 @@ public class BCShader<T extends BCShader<T>> {
     protected CCUniform timeUniform;
     private CCUniform decayUniform;
 
-    public BCShader(ResourceLocation location, VertexFormat format) {
+    public BCShader(Identifier location, VertexFormat format) {
         this.location = location;
         this.format = format;
     }

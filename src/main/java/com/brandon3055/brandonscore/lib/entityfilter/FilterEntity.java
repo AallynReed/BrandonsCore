@@ -5,7 +5,7 @@ import codechicken.lib.data.MCDataOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -44,7 +44,7 @@ public class FilterEntity extends FilterBase {
 
     @Override
     public boolean test(Entity entity) {
-        ResourceLocation res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        Identifier res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
         if (entityName.isEmpty() || res == null) {
             return !whitelistEntity;
         }

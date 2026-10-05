@@ -18,7 +18,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -40,7 +40,7 @@ import java.util.Map;
 public class BCoreNetwork {
     private static final CrashLock LOCK = new CrashLock("Already Initialized.");
 
-    public static final ResourceLocation CHANNEL_NAME = ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, "network");
+    public static final Identifier CHANNEL_NAME = Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "network");
     public static final PacketCustomChannel CHANNEL = new PacketCustomChannel(CHANNEL_NAME)
             .optional()
             .versioned(BrandonsCore.container().getModInfo().getVersion().toString())
@@ -189,7 +189,7 @@ public class BCoreNetwork {
         new PacketCustom(CHANNEL_NAME, C_OPEN_HUD_CONFIG, player.registryAccess()).sendToPlayer(player);
     }
 
-    public static void sendMultiBlockDefinitions(ServerPlayer player, Map<ResourceLocation, MultiBlockDefinition> multiBlockMap) {
+    public static void sendMultiBlockDefinitions(ServerPlayer player, Map<Identifier, MultiBlockDefinition> multiBlockMap) {
         PacketCustom packet = new PacketCustom(CHANNEL_NAME, C_MULTI_BLOCK_DEFINITIONS, player.registryAccess());
         packet.writeVarInt(multiBlockMap.size());
         multiBlockMap.forEach((key, value) -> {

@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceMetadata;
 
 /**
@@ -72,7 +72,7 @@ public class RenderUtils {
         }
     }
 
-    public static Material fromRawTexture(ResourceLocation texture) {
+    public static Material fromRawTexture(Identifier texture) {
         return new Material(texture, texture, FullSprite::new);
     }
 
@@ -81,7 +81,7 @@ public class RenderUtils {
     }
 
     private static class FullSprite extends TextureAtlasSprite {
-        private FullSprite(ResourceLocation location) {
+        private FullSprite(Identifier location) {
             super(location, new SpriteContents(location, new FrameSize(1, 1), new NativeImage(1, 1, false), ResourceMetadata.EMPTY), 1, 1, 0, 0);
         }
 

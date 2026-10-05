@@ -2,7 +2,7 @@ package com.brandon3055.brandonscore.utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +28,7 @@ public class MultiBlockHelper {
     }
 
     public void setBlock(String name, Level world, BlockPos pos) {
-        Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name));
+        Block block = BuiltInRegistries.BLOCK.get(Identifier.parse(name));
         if (block != Blocks.AIR) {
             world.setBlockAndUpdate(pos, block.defaultBlockState());
         } else {

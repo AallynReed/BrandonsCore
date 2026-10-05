@@ -2,7 +2,7 @@ package com.brandon3055.brandonscore.worldentity;
 
 import com.brandon3055.brandonscore.utils.LogHelperBC;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -61,7 +61,7 @@ public abstract class WorldEntity {
     }
 
     private void writeInternal(CompoundTag nbt) {
-        ResourceLocation resourcelocation = WorldEntityType.getId(this.getType());
+        Identifier resourcelocation = WorldEntityType.getId(this.getType());
         if (resourcelocation == null) {
             throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
         } else {
@@ -80,7 +80,7 @@ public abstract class WorldEntity {
     @Nullable
     public static WorldEntity readWorldEntity(CompoundTag nbt) {
         String id = nbt.getString("id");
-        return Optional.ofNullable(WorldEntityHandler.REGISTRY.get(ResourceLocation.parse(id)))
+        return Optional.ofNullable(WorldEntityHandler.REGISTRY.get(Identifier.parse(id)))
                 .map(e -> {
                     try {
                         return e.create();

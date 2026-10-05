@@ -3,7 +3,7 @@ package com.brandon3055.brandonscore.client.shader;
 import codechicken.lib.render.shader.CCUniform;
 import com.brandon3055.brandonscore.BrandonsCore;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,10 +20,10 @@ public final class ChaosEntityShader extends BCShader<ChaosEntityShader> {
     private CCUniform disableOverlayUniform;
 
     public ChaosEntityShader(String path, VertexFormat format) {
-        super(ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, path), format);
+        super(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, path), format);
     }
 
-    public ChaosEntityShader(ResourceLocation location, VertexFormat format) {
+    public ChaosEntityShader(Identifier location, VertexFormat format) {
         super(location, format);
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import org.apache.logging.log4j.LogManager;
@@ -45,12 +45,12 @@ public abstract class MultiBlockProvider implements DataProvider {
 
         List<CompletableFuture<?>> futures = new LinkedList<>();
         for (String name : builtMultiBlocks.keySet()) {
-            futures.add(saveMultiBlock(pOutput, ResourceLocation.fromNamespaceAndPath(modid, name), builtMultiBlocks.get(name)));
+            futures.add(saveMultiBlock(pOutput, Identifier.fromNamespaceAndPath(modid, name), builtMultiBlocks.get(name)));
         }
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
-    private CompletableFuture<?> saveMultiBlock(CachedOutput cache, ResourceLocation id, JsonObject multiBlockJson) {
+    private CompletableFuture<?> saveMultiBlock(CachedOutput cache, Identifier id, JsonObject multiBlockJson) {
         Path output = gen.getPackOutput().getOutputFolder(PackOutput.Target.DATA_PACK).resolve(modid + "/multiblocks/" + id.getPath() + ".json");
         return DataProvider.saveStable(cache, multiBlockJson, output);
     }

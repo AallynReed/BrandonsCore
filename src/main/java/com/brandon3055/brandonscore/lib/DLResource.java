@@ -1,6 +1,6 @@
 package com.brandon3055.brandonscore.lib;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Created by brandon3055 on 13/09/2016.
@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class DLResource {
 
-    public final ResourceLocation resource;
+    public final Identifier resource;
     public volatile int width = 0;
     public volatile int height = 0;
     public volatile boolean sizeSet = false;
@@ -17,7 +17,7 @@ public class DLResource {
     public boolean lastCheckStatus = false;
 
     public DLResource(String resourceDomainIn, String url) {
-        this.resource = ResourceLocation.fromNamespaceAndPath(resourceDomainIn, url);
+        this.resource = Identifier.fromNamespaceAndPath(resourceDomainIn, url);
     }
 
     /**

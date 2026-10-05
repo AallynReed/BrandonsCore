@@ -33,7 +33,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.RotationArgument;
@@ -45,7 +45,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -132,11 +132,11 @@ public class BCUtilCommands {
                             }
                             return 0;
                         })
-                        .then(Commands.argument("multiblock", ResourceLocationArgument.id())
+                        .then(Commands.argument("multiblock", IdentifierArgument.id())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(MultiBlockManager.getRegisteredIds(), builder))
-                                .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), ResourceLocationArgument.getId(context, "multiblock"), Vec3.ZERO))
+                                .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), IdentifierArgument.getId(context, "multiblock"), Vec3.ZERO))
                                 .then(Commands.argument("rotation", Vec3Argument.vec3(false))
-                                        .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), ResourceLocationArgument.getId(context, "multiblock"), Vec3Argument.getVec3(context, "rotation")))
+                                        .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), IdentifierArgument.getId(context, "multiblock"), Vec3Argument.getVec3(context, "rotation")))
                                 )
                         )
                 );
@@ -156,11 +156,11 @@ public class BCUtilCommands {
         return Commands.literal("place_multiblock")
                 .requires(cs -> cs.hasPermission(3))
                 .then(Commands.argument("pos", BlockPosArgument.blockPos())
-                        .then(Commands.argument("multiblock", ResourceLocationArgument.id())
+                        .then(Commands.argument("multiblock", IdentifierArgument.id())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(MultiBlockManager.getRegisteredIds(), builder))
-                                .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), ResourceLocationArgument.getId(context, "multiblock"), Vec3.ZERO))
+                                .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), IdentifierArgument.getId(context, "multiblock"), Vec3.ZERO))
                                 .then(Commands.argument("rotation", Vec3Argument.vec3(false))
-                                        .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), ResourceLocationArgument.getId(context, "multiblock"), Vec3Argument.getVec3(context, "rotation")))
+                                        .executes(context -> MultiBlockManager.placeCommand(context.getSource().getLevel(), BlockPosArgument.getLoadedBlockPos(context, "pos"), IdentifierArgument.getId(context, "multiblock"), Vec3Argument.getVec3(context, "rotation")))
                                 )
                         )
                 );

@@ -1,6 +1,6 @@
 package com.brandon3055.brandonscore.worldentity;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ public class WorldEntityType<T extends WorldEntity> {
     }
 
     @Nullable
-    public static ResourceLocation getId(WorldEntityType<?> tileEntityTypeIn) {
+    public static Identifier getId(WorldEntityType<?> tileEntityTypeIn) {
         return WorldEntityHandler.REGISTRY.getKey(tileEntityTypeIn);
     }
 }

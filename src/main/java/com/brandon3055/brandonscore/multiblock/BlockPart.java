@@ -2,7 +2,7 @@ package com.brandon3055.brandonscore.multiblock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +16,7 @@ import java.util.Collections;
 public class BlockPart implements MultiBlockPart {
     private final Block block;
 
-    public BlockPart(ResourceLocation id) {
+    public BlockPart(Identifier id) {
         if (!BuiltInRegistries.BLOCK.containsKey(id)) {
             throw new IllegalStateException("Specified block could not be found: " + id);
         }

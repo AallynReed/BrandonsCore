@@ -34,7 +34,7 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -62,17 +62,17 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
     private static final RenderType WEB_SHADER_TYPE = createWebType("web_shader", BCShaders.WINGS_WEB_SHADER);
 
     //Basic badge types
-    private static final RenderType LOLNET_TYPE = createBasicBadgeType(ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/lolnet.png"), false);
-    private static final RenderType CR_TYPE = createBasicBadgeType(ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/cr.png"), false);
-    private static final RenderType OG_TYPE = createBasicBadgeType(ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/og_patreon.png"), false);
+    private static final RenderType LOLNET_TYPE = createBasicBadgeType(Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/lolnet.png"), false);
+    private static final RenderType CR_TYPE = createBasicBadgeType(Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/cr.png"), false);
+    private static final RenderType OG_TYPE = createBasicBadgeType(Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/og_patreon.png"), false);
 
     //Fancy badge types
-    private static final RenderType PATREON_LOGO_TYPE = createBadgeType("badge", BCShaders.BADGE_FOIL_SHADER, ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_base.png"), true);
-    private static final RenderType PATREON_LOGO_OUTLINE_TYPE = createBadgeType("badge", BCShaders.BADGE_OUTLINE_SHADER, ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_base.png"), true);
-    private static final RenderType PATREON_CORE_TYPE = createBadgeType("badge", BCShaders.BADGE_CORE_SHADER, ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_core.png"), true);
+    private static final RenderType PATREON_LOGO_TYPE = createBadgeType("badge", BCShaders.BADGE_FOIL_SHADER, Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_base.png"), true);
+    private static final RenderType PATREON_LOGO_OUTLINE_TYPE = createBadgeType("badge", BCShaders.BADGE_OUTLINE_SHADER, Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_base.png"), true);
+    private static final RenderType PATREON_CORE_TYPE = createBadgeType("badge", BCShaders.BADGE_CORE_SHADER, Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/patreon_core.png"), true);
 
-    private static final RenderType BADGE_VET_TYPE = createBadgeType("vet", BCShaders.VET_BADGE_SHADER, ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/veteran.png"), false);
-    private static final RenderType BADGE_VET_CORE_TYPE = createBadgeType("vet_over", BCShaders.VET_BADGE_SHADER, ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/badges/veteran_overlay.png"), false);
+    private static final RenderType BADGE_VET_TYPE = createBadgeType("vet", BCShaders.VET_BADGE_SHADER, Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/veteran.png"), false);
+    private static final RenderType BADGE_VET_CORE_TYPE = createBadgeType("vet_over", BCShaders.VET_BADGE_SHADER, Identifier.fromNamespaceAndPath(MODID, "textures/contributor/badges/veteran_overlay.png"), false);
 
     private final WingBoneRenderer humBone;
     private final WingBoneRenderer radBone;
@@ -85,7 +85,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
 
     public ContributorModel() {
         super(createMesh(new CubeDeformation(1), 0).getRoot().bake(64, 64));
-        Map<String, CCModel> model = new OBJParser(ResourceLocation.fromNamespaceAndPath(MODID, "models/entity/contributor_wings.obj")).ignoreMtl().parse();
+        Map<String, CCModel> model = new OBJParser(Identifier.fromNamespaceAndPath(MODID, "models/entity/contributor_wings.obj")).ignoreMtl().parse();
         CCModel hum = model.get("hum_bone").backfacedCopy();
         CCModel humShell = model.get("hum_bone_shell").backfacedCopy();
         CCModel rad = model.get("rad_bone").backfacedCopy();
@@ -108,9 +108,9 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
         f3Bone = new WingBoneRenderer(f3, new Vector3(-1.5, 31, 2.8), true);
         f3Bone.shell = new WingBoneRenderer(f3Shell, Vector3.ZERO, false);
 
-        chestpiece1 = BuiltInRegistries.ITEM.get(ResourceLocation.parse("draconicevolution:wyvern_chestpiece"));
-        chestpiece2 = BuiltInRegistries.ITEM.get(ResourceLocation.parse("draconicevolution:draconic_chestpiece"));
-        chestpiece3 = BuiltInRegistries.ITEM.get(ResourceLocation.parse("draconicevolution:chaotic_chestpiece"));
+        chestpiece1 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:wyvern_chestpiece"));
+        chestpiece2 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:draconic_chestpiece"));
+        chestpiece3 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:chaotic_chestpiece"));
     }
 
     @Override
@@ -453,7 +453,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
     private static RenderType createBoneType(String name, ContribShader shader) {
         return RenderType.create(MODID + ":" + name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, false, false, RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(shader::getShaderInstance))
-                .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/contributor_wings_bones.png"), false, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(Identifier.fromNamespaceAndPath(MODID, "textures/contributor/contributor_wings_bones.png"), false, false))
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .setOverlayState(RenderStateShard.OVERLAY)
                 .createCompositeState(false)
@@ -463,7 +463,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
     private static RenderType createChaosType(String name, BCShader<?> shader) {
         return RenderType.create(MODID + ":" + name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(shader::getShaderInstance))
-                .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(MODID, "textures/chaos_shader.png"), true, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(Identifier.fromNamespaceAndPath(MODID, "textures/chaos_shader.png"), true, false))
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .setOverlayState(RenderStateShard.OVERLAY)
                 .createCompositeState(false)
@@ -473,7 +473,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
     private static RenderType createWebType(String name, ContribShader shader) {
         return RenderType.create(MODID + ":" + name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(shader::getShaderInstance))
-                .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(MODID, "textures/contributor/contributor_wings_web.png"), false, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(Identifier.fromNamespaceAndPath(MODID, "textures/contributor/contributor_wings_web.png"), false, false))
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .setOverlayState(RenderStateShard.OVERLAY)
                 .setCullState(RenderStateShard.NO_CULL)
@@ -481,7 +481,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
         );
     }
 
-    private static RenderType createBadgeType(String name, BCShader<?> shader, ResourceLocation texture, boolean blur) {
+    private static RenderType createBadgeType(String name, BCShader<?> shader, Identifier texture, boolean blur) {
         return RenderType.create(MODID + ":badge" + name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(shader::getShaderInstance))
                 .setTextureState(new RenderStateShard.TextureStateShard(texture, blur, false))
@@ -504,7 +504,7 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
 //                .createCompositeState(true));
 //    }
 
-    private static RenderType createBasicBadgeType(ResourceLocation texture, boolean blur) {
+    private static RenderType createBasicBadgeType(Identifier texture, boolean blur) {
         return RenderType.create(MODID + ":basic_badge", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexLightmapShader))
                 .setTextureState(new RenderStateShard.TextureStateShard(texture, blur, false))

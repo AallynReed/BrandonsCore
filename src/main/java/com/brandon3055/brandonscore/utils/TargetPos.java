@@ -17,8 +17,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -163,7 +163,7 @@ public record TargetPos(Vector3 pos, ResourceKey<Level> dimension, Optional<Vect
 
     public static TargetPos readFromNBT(CompoundTag nbt) {
         Vector3 pos = Vector3.fromNBT(nbt);
-        ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(nbt.getString("dim")));
+        ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(nbt.getString("dim")));
         if (nbt.contains("facing_x")) {
             return new TargetPos(pos, dimension, Optional.of(new Vector2(nbt.getDouble("facing_x"), nbt.getDouble("facing_y"))));
         }

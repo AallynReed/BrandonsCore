@@ -10,7 +10,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -50,7 +50,7 @@ public class HudData {
 
         try (JsonWriter fileWriter = new JsonWriter(new FileWriter(settingsPath.toFile()))) {
             fileWriter.setIndent("    ");
-            for (ResourceLocation key : hudElements.keySet()) {
+            for (Identifier key : hudElements.keySet()) {
                 CompoundTag nbt = new CompoundTag();
                 hudElements.get(key).writeNBT(nbt);
                 storage.addProperty(key.toString(), nbt.toString());
@@ -77,7 +77,7 @@ public class HudData {
             JsonObject element = (JsonObject) parser.parse(reader);
 
             for (Map.Entry<String, JsonElement> entry : element.entrySet()) {
-                ResourceLocation key = ResourceLocation.parse(entry.getKey());
+                Identifier key = Identifier.parse(entry.getKey());
                 if (hudElements.containsKey(key)) {
                     CompoundTag nbt = TagParser.parseTag(entry.getValue().getAsString());
                     hudElements.get(key).readNBT(nbt);

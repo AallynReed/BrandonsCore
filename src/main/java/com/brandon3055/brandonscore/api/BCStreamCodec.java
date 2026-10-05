@@ -4,8 +4,8 @@ import com.mojang.datafixers.util.*;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Registry;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 
 import java.util.function.BiFunction;
@@ -20,12 +20,12 @@ public class BCStreamCodec {
         return new StreamCodec<>() {
             @Override
             public TagKey<T> decode(ByteBuf buf) {
-                return TagKey.create(resourceKey, ResourceLocation.STREAM_CODEC.decode(buf));
+                return TagKey.create(resourceKey, Identifier.STREAM_CODEC.decode(buf));
             }
 
             @Override
             public void encode(ByteBuf buf, TagKey<T> tagKey) {
-                ResourceLocation.STREAM_CODEC.encode(buf, tagKey.location());
+                Identifier.STREAM_CODEC.encode(buf, tagKey.location());
             }
         };
     }

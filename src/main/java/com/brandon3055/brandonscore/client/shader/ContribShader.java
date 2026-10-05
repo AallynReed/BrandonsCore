@@ -3,7 +3,7 @@ package com.brandon3055.brandonscore.client.shader;
 import codechicken.lib.render.shader.CCUniform;
 import com.brandon3055.brandonscore.BrandonsCore;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 
@@ -20,10 +20,10 @@ public class ContribShader extends BCShader<ContribShader> {
     private CCUniform hueUniform;
 
     public ContribShader(String path, VertexFormat format) {
-        super(ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, path), format);
+        super(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, path), format);
     }
 
-    public ContribShader(ResourceLocation location, VertexFormat format) {
+    public ContribShader(Identifier location, VertexFormat format) {
         super(location, format);
     }
 

@@ -4,7 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -237,7 +237,7 @@ public class StringyStacks {
             }
         }
 
-        ResourceLocation registryName = ResourceLocation.parse(stackString);
+        Identifier registryName = Identifier.parse(stackString);
         Item item = BuiltInRegistries.ITEM.get(registryName);
         Block block = BuiltInRegistries.BLOCK.get(registryName);
         if (item == Items.AIR && block == Blocks.AIR) {
@@ -313,7 +313,7 @@ public class StringyStacks {
     @Deprecated
     public static ItemStack legacyStackConverter(String itemString, int count, int damage, @Nullable CompoundTag nbt) {
         try {
-            ResourceLocation itemID = ResourceLocation.parse(itemString);
+            Identifier itemID = Identifier.parse(itemString);
             Item item = BuiltInRegistries.ITEM.get(itemID);
             Block block = BuiltInRegistries.BLOCK.get(itemID);
             if (item == Items.AIR && block == Blocks.AIR) {

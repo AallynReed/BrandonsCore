@@ -18,7 +18,7 @@ import net.covers1624.quack.util.SneakyUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -217,10 +217,10 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
 
         GuiTextField nameField = new GuiTextField(node)
                 .setTextState(TextState.create(() -> node.getNode().getEntityName(), s -> node.getNode().setEntityName(s)))
-                .setFilter(s -> ResourceLocation.tryParse(s) != null)
-                .setTextColor(() -> BuiltInRegistries.ENTITY_TYPE.containsKey(ResourceLocation.tryParse(node.getNode().getEntityName())) ? 0x00FF00 : 0xFF0000)
+                .setFilter(s -> Identifier.tryParse(s) != null)
+                .setTextColor(() -> BuiltInRegistries.ENTITY_TYPE.containsKey(Identifier.tryParse(node.getNode().getEntityName())) ? 0x00FF00 : 0xFF0000)
                 .setTooltip(() -> {
-                    ResourceLocation name = ResourceLocation.tryParse(node.getNode().getEntityName());
+                    Identifier name = Identifier.tryParse(node.getNode().getEntityName());
                     if (name == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(name)) {
                         return Collections.singletonList(Component.translatable("mod_gui.brandonscore.entity_filter.entity_type.unknown").withStyle(ChatFormatting.RED));
                     }
@@ -353,7 +353,7 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
         GuiTextField tagField = new GuiTextField(node)
                 .setEnabled(() -> node.getNode().isTagMode())
                 .setTextState(TextState.create(() -> node.getNode().getTagString(), s -> node.getNode().setTagString(s)))
-                .setFilter(s -> ResourceLocation.tryParse(s) != null)
+                .setFilter(s -> Identifier.tryParse(s) != null)
                 .setTextColor(() -> BuiltInRegistries.ITEM.getTags().anyMatch(e -> e.equals(node.getNode().getTag())) ? 0x00FF00 : 0xFF0000)
                 .setTooltipSingle(() -> {
                     boolean match = BuiltInRegistries.ITEM.getTags().anyMatch(e -> e.equals(node.getNode().getTag()));

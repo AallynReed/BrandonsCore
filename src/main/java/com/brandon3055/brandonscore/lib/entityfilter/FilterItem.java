@@ -4,7 +4,7 @@ import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -156,7 +156,7 @@ public class FilterItem extends FilterBase {
 
     public TagKey<Item> getTag() {
         if (tagCache == null) {
-            tagCache = ItemTags.create(ResourceLocation.parse(tagString));
+            tagCache = ItemTags.create(Identifier.parse(tagString));
         }
         return tagCache;
     }

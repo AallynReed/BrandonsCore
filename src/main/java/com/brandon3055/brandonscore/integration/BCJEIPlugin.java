@@ -9,7 +9,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 
 import java.util.List;
@@ -22,12 +22,12 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class BCJEIPlugin implements IModPlugin {
 
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(BrandonsCore.MODID, "jei_plugin");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "jei_plugin");
     public static IJeiRuntime jeiRuntime = null;
 //    public static IIngredientRegistry ingredientRegistry = null;
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return ID;
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +23,7 @@ import java.util.*;
  * Created by brandon3055 on 26/06/2022
  */
 public class MultiBlockDefinition {
-    private final ResourceLocation id;
+    private final Identifier id;
     // Holding onto this, so I can yeet it at the client because I'm to lazy to write dedicated network serialization when I already have a convenient json and a way to read it.
     private final JsonElement json;
 
@@ -36,13 +36,13 @@ public class MultiBlockDefinition {
     //Position the position of each block relative to origin
     private Map<BlockPos, MultiBlockPart> blockMap = new HashMap<>();
 
-    public MultiBlockDefinition(ResourceLocation id, JsonElement json) {
+    public MultiBlockDefinition(Identifier id, JsonElement json) {
         this.id = id;
         this.json = json;
         loadFromJson();
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 
@@ -158,11 +158,11 @@ public class MultiBlockDefinition {
 
             JsonObject keyVal = entry.getValue().getAsJsonObject();
             if (keyVal.has("tag")) {
-                ResourceLocation resourcelocation = ResourceLocation.parse(keyVal.get("tag").getAsString());
+                Identifier resourcelocation = Identifier.parse(keyVal.get("tag").getAsString());
                 TagKey<Block> tagkey = TagKey.create(Registries.BLOCK, resourcelocation);
                 keyMap.put(key, new TagPart(tagkey));
             } else if (keyVal.has("block")) {
-                ResourceLocation resourcelocation = ResourceLocation.parse(keyVal.get("block").getAsString());
+                Identifier resourcelocation = Identifier.parse(keyVal.get("block").getAsString());
                 if (BuiltInRegistries.BLOCK.getKey(Blocks.AIR).equals(resourcelocation)) {
                     keyMap.put(key, new EmptyPart());
                 } else {

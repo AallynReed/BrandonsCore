@@ -1,6 +1,6 @@
 package com.brandon3055.brandonscore.lib;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ public interface IEquipmentManager {
 
     ItemStack findMatchingItem(Predicate<ItemStack> predicate, LivingEntity entity);
 
-    List<ResourceLocation> getSlotIcons(LivingEntity entity);
+    List<Identifier> getSlotIcons(LivingEntity entity);
 
     void registerCap(RegisterCapabilitiesEvent event, Item item);
 }
