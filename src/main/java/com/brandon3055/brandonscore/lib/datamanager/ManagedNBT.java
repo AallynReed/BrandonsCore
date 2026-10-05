@@ -106,7 +106,7 @@ public class ManagedNBT extends AbstractManagedData<CompoundTag> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getCompound(name);
+        value = compound.getCompoundOrEmpty(name);
         notifyListeners(value);
     }
 

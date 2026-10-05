@@ -91,7 +91,7 @@ public class ManagedLong extends AbstractManagedData<Long> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getLong(name);
+        value = compound.getLongOr(name, 0);
         notifyListeners(value);
     }
 

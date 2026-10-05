@@ -310,7 +310,7 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
         dataManager.readFromStackNBT(provider, nbt);
         savedItemDataObjects.forEach((tagName, serializable) -> serializable.deserializeNBT(provider, nbt.getCompound(tagName)));
         if (nbt.contains("bc_caps")) {
-            capManager.deserialize(provider, nbt.getCompound("bc_caps"));
+            capManager.deserialize(provider, nbt.getCompoundOrEmpty("bc_caps"));
         }
         readExtraTileAndStack(provider, nbt);
     }
@@ -337,11 +337,11 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
 
     public void readExtraNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         if (nbt.contains("bc_caps")) {
-            capManager.deserialize(provider, nbt.getCompound("bc_caps"));
+            capManager.deserialize(provider, nbt.getCompoundOrEmpty("bc_caps"));
         }
 
-        if (nbt.contains("custom_name", 8)) {
-            customName = nbt.getString("custom_name");
+        if (nbt.getString("custom_name").isPresent()) {
+            customName = nbt.getStringOr("custom_name", "");
         }
 
         savedDataObjects.forEach((tagName, serializable) -> serializable.deserializeNBT(provider, nbt.getCompound(tagName)));

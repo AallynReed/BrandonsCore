@@ -124,10 +124,10 @@ public class TileItemStackHandler extends ItemStackHandler {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         stacks.clear();
-        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
+        ListTag tagList = nbt.getListOrEmpty("Items");
         for (int i = 0; i < tagList.size(); i++) {
-            CompoundTag itemTags = tagList.getCompound(i);
-            int slot = itemTags.getInt("Slot");
+            CompoundTag itemTags = tagList.getCompoundOrEmpty(i);
+            int slot = itemTags.getIntOr("Slot", 0);
 
             if (slot >= 0 && slot < stacks.size()) {
                 stacks.set(slot, ItemStack.parseOptional(provider, itemTags));

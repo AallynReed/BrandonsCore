@@ -103,12 +103,12 @@ public class FilterGroup extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        andGroup = nbt.getBoolean("and_group");
+        andGroup = nbt.getBooleanOr("and_group", false);
         subNodeMap.clear();
         if (nbt.contains("sub_nodes")) {
-            ListTag tagList = nbt.getList("sub_nodes", 10);
+            ListTag tagList = nbt.getListOrEmpty("sub_nodes");
             for (Tag tag : tagList) {
-                FilterType type = FilterType.filterTypeMap[((CompoundTag) tag).getByte("filter_type")];
+                FilterType type = FilterType.filterTypeMap[((CompoundTag) tag).getByteOr("filter_type", (byte) 0)];
                 FilterBase node = type.createNode(getFilter());
                 node.onLoaded(this);
                 node.deserializeNBT(provider, (CompoundTag) tag);

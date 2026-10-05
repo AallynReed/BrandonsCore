@@ -52,7 +52,7 @@ public class FilterHostile extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        whitelistHostile = nbt.getBoolean("include");
+        whitelistHostile = nbt.getBooleanOr("include", false);
     }
 
     @Override

@@ -124,9 +124,9 @@ public abstract class AbstractHudElement {
     }
 
     public void readNBT(CompoundTag nbt) {
-        enabled = nbt.getBoolean("enabled");
-        rawPos.x = nbt.getDouble("pos_x");
-        rawPos.y = nbt.getDouble("pos_y");
+        enabled = nbt.getBooleanOr("enabled", false);
+        rawPos.x = nbt.getDoubleOr("pos_x", 0);
+        rawPos.y = nbt.getDoubleOr("pos_y", 0);
     }
 
     public void setChangeListener(Runnable changeListener) {

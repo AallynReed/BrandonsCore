@@ -110,10 +110,10 @@ public class ManagedVector3 extends AbstractManagedData<Vector3> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (!compound.contains(name, 10)) {
+        if (!compound.getCompound(name).isPresent()) {
             value = defaultValue == null ? null : defaultValue.copy();
         } else {
-            CompoundTag nbt = compound.getCompound(name);
+            CompoundTag nbt = compound.getCompoundOrEmpty(name);
             if (nbt.contains("null")){
                 value = null;
             } else {

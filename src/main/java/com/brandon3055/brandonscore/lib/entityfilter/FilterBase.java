@@ -63,7 +63,7 @@ public abstract class FilterBase implements INBTSerializable<CompoundTag>, IMCDa
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        nodeID = compound.getInt("node_id");
+        nodeID = compound.getIntOr("node_id", 0);
         getFilter().trackNode(this);
     }
 

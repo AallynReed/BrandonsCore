@@ -183,14 +183,14 @@ public class FilterItem extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compound) {
         super.deserializeNBT(provider, compound);
-        whitelistMode = compound.getBoolean("whitelist_mode");
-        tagString = compound.getString("tag_string");
-        tagMode = compound.getBoolean("tag_mode");
+        whitelistMode = compound.getBooleanOr("whitelist_mode", false);
+        tagString = compound.getStringOr("tag_string", "");
+        tagMode = compound.getBooleanOr("tag_mode", false);
         filterStack = ItemStack.parseOptional(provider, compound.getCompound("filter_stack"));
-        fuzzyMatch = compound.getBoolean("fuzzy_match");
-        matchCount = compound.getBoolean("match_count");
-        filterBlocks = compound.getBoolean("filter_blocks");
-        filterItems = compound.getBoolean("filter_items");
+        fuzzyMatch = compound.getBooleanOr("fuzzy_match", false);
+        matchCount = compound.getBooleanOr("match_count", false);
+        filterBlocks = compound.getBooleanOr("filter_blocks", false);
+        filterItems = compound.getBooleanOr("filter_items", false);
     }
 
     @Override

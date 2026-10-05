@@ -72,8 +72,8 @@ public class FilterTamed extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        whitelistTamed = nbt.getBoolean("include");
-        includeTamable = nbt.getBoolean("tamable");
+        whitelistTamed = nbt.getBooleanOr("include", false);
+        includeTamable = nbt.getBooleanOr("tamable", false);
     }
 
     @Override

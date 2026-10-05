@@ -91,7 +91,7 @@ public class ManagedShort extends AbstractManagedData<Short> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getShort(name);
+        value = compound.getShortOr(name, (short) 0);
         notifyListeners(value);
     }
 

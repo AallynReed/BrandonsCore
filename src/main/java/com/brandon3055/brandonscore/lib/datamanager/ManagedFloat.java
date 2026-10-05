@@ -90,7 +90,7 @@ public class ManagedFloat extends AbstractManagedData<Float> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getFloat(name);
+        value = compound.getFloatOr(name, 0);
         notifyListeners(value);
     }
 

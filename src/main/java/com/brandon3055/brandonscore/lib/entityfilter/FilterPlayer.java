@@ -100,9 +100,9 @@ public class FilterPlayer extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        whitelistPlayers = nbt.getBoolean("include");
-        playerName = nbt.getString("name");
-        playerUUID = nbt.getString("uuid");
+        whitelistPlayers = nbt.getBooleanOr("include", false);
+        playerName = nbt.getStringOr("name", "");
+        playerUUID = nbt.getStringOr("uuid", "");
     }
 
     @Override

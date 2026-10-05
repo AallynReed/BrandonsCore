@@ -104,7 +104,7 @@ public class ManagedResource extends AbstractManagedData<Identifier> {
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
         if (compound.contains(name)) {
-            value = Identifier.parse(compound.getString(name));
+            value = Identifier.parse(compound.getStringOr(name, ""));
         } else {
             value = null;
         }

@@ -68,8 +68,8 @@ public class FilterEntity extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        whitelistEntity = nbt.getBoolean("include");
-        entityName = nbt.getString("name");
+        whitelistEntity = nbt.getBooleanOr("include", false);
+        entityName = nbt.getStringOr("name", "");
     }
 
     @Override

@@ -69,8 +69,8 @@ public class FilterAdults extends FilterBase {
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
-        whitelistAdults = nbt.getBoolean("include");
-        includeNonAgeable = nbt.getBoolean("tamable");
+        whitelistAdults = nbt.getBooleanOr("include", false);
+        includeNonAgeable = nbt.getBooleanOr("tamable", false);
     }
 
     @Override

@@ -111,14 +111,14 @@ public class ManagedVector3i extends AbstractManagedData<Vec3i> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (!compound.contains(name, 10)) {
+        if (!compound.getCompound(name).isPresent()) {
             value = defaultValue == null ? null : new Vec3i(defaultValue.getX(), defaultValue.getY(), defaultValue.getZ());
         } else {
-            CompoundTag nbt = compound.getCompound(name);
+            CompoundTag nbt = compound.getCompoundOrEmpty(name);
             if (nbt.contains("null")){
                 value = null;
             } else {
-                value = new Vec3i(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
+                value = new Vec3i(nbt.getIntOr("x", 0), nbt.getIntOr("y", 0), nbt.getIntOr("z", 0));
             }
         }
         notifyListeners(value);

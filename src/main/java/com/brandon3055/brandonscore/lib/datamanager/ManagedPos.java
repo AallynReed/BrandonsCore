@@ -108,10 +108,10 @@ public class ManagedPos extends AbstractManagedData<BlockPos> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (!compound.contains(name, 10)) {
+        if (!compound.getCompound(name).isPresent()) {
             value = defaultValue == null ? null : new BlockPos(defaultValue);
         }else {
-            CompoundTag nbt = compound.getCompound(name);
+            CompoundTag nbt = compound.getCompoundOrEmpty(name);
             if (nbt.contains("null")) {
                 value = null;
             } else {

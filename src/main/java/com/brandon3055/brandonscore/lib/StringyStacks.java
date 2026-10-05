@@ -141,12 +141,12 @@ public class StringyStacks {
         stackNBT.putString("id", itemID);
         stackNBT.putByte("Count", (byte) count);
         if (tagNBT != null && !tagNBT.isEmpty()) {
-            if (tagNBT.size() == 2 && tagNBT.contains("tag", 10) && tagNBT.contains("ForgeCaps")) {
-                CompoundTag tag = tagNBT.getCompound("tag");
+            if (tagNBT.size() == 2 && tagNBT.getCompound("tag").isPresent() && tagNBT.contains("ForgeCaps")) {
+                CompoundTag tag = tagNBT.getCompoundOrEmpty("tag");
                 if (!tag.isEmpty()) {
                     stackNBT.put("tag", tag);
                 }
-                CompoundTag caps = tagNBT.getCompound("ForgeCaps");
+                CompoundTag caps = tagNBT.getCompoundOrEmpty("ForgeCaps");
                 if (!caps.isEmpty()) {
                     stackNBT.put("ForgeCaps", caps);
                 }
@@ -269,11 +269,11 @@ public class StringyStacks {
             CompoundTag stackTag = (CompoundTag) stack.saveOptional(provider);
             CompoundTag nbt = null;
             CompoundTag caps = null;
-            if (withNBT && stackTag.contains("tag", 10)) {
-                nbt = stackTag.getCompound("tag");
+            if (withNBT && stackTag.getCompound("tag").isPresent()) {
+                nbt = stackTag.getCompoundOrEmpty("tag");
             }
             if (withForgeCaps && stackTag.contains("ForgeCaps")) {
-                caps = stackTag.getCompound("ForgeCaps");
+                caps = stackTag.getCompoundOrEmpty("ForgeCaps");
             }
             CompoundTag stringTag = null;
             if (nbt != null && caps == null) {

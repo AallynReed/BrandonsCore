@@ -91,7 +91,7 @@ public class ManagedInt extends AbstractManagedData<Integer> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getInt(name);
+        value = compound.getIntOr(name, 0);
         notifyListeners(value);
     }
 

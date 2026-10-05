@@ -181,8 +181,8 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
 
     @Override
     public void readFromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (compound.contains(BlockBCore.BC_MANAGED_DATA_FLAG, 10)) {
-            CompoundTag dataTag = compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG);
+        if (compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG).isPresent()) {
+            CompoundTag dataTag = compound.getCompoundOrEmpty(BlockBCore.BC_MANAGED_DATA_FLAG);
             DataUtils.forEachMatch(managedDataList, data -> data.flags().saveNBT, data -> data.fromNBT(provider, dataTag));
         }
     }
@@ -250,8 +250,8 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
     }
 
     public void readSyncNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (compound.contains(BlockBCore.BC_MANAGED_DATA_FLAG, 10)) {
-            CompoundTag dataTag = compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG);
+        if (compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG).isPresent()) {
+            CompoundTag dataTag = compound.getCompoundOrEmpty(BlockBCore.BC_MANAGED_DATA_FLAG);
             DataUtils.forEachMatch(managedDataList, data -> data.flags().syncViaPacket(), data -> data.fromNBT(provider, dataTag));
         }
     }
@@ -268,8 +268,8 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
     }
 
     public void readFromStackNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (compound.contains(BlockBCore.BC_MANAGED_DATA_FLAG, 10)) {
-            CompoundTag dataTag = compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG);
+        if (compound.getCompound(BlockBCore.BC_MANAGED_DATA_FLAG).isPresent()) {
+            CompoundTag dataTag = compound.getCompoundOrEmpty(BlockBCore.BC_MANAGED_DATA_FLAG);
             DataUtils.forEachMatch(managedDataList, data -> data.flags().saveItem, data -> data.fromNBT(provider, dataTag));
         }
     }

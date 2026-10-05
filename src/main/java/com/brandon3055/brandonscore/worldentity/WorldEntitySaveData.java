@@ -35,7 +35,7 @@ public class WorldEntitySaveData extends SavedData {
 
     public static WorldEntitySaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
         WorldEntitySaveData data = new WorldEntitySaveData();
-        ListTag list = nbt.getList("entities", 10);
+        ListTag list = nbt.getListOrEmpty("entities");
         for (Tag inbt : list) {
             WorldEntity entity = WorldEntity.readWorldEntity((CompoundTag) inbt);
             if (entity != null) {

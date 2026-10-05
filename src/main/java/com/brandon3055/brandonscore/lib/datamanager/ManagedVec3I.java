@@ -120,11 +120,11 @@ public class ManagedVec3I extends AbstractManagedData<Vec3I> {
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
         value = new Vec3I();
-        if (compound.getList(name, 3).size() == 3) {
-            ListTag list = compound.getList(name, 3);
-            value.x = list.getInt(0);
-            value.y = list.getInt(1);
-            value.z = list.getInt(2);
+        if (compound.getListOrEmpty(name).size() == 3) {
+            ListTag list = compound.getListOrEmpty(name);
+            value.x = list.getIntOr(0, 0);
+            value.y = list.getIntOr(1, 0);
+            value.z = list.getIntOr(2, 0);
         }
         notifyListeners(value);
     }

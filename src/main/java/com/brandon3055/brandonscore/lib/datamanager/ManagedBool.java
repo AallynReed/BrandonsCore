@@ -89,7 +89,7 @@ public class ManagedBool extends AbstractManagedData<Boolean> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getBoolean(name);
+        value = compound.getBooleanOr(name, false);
         notifyListeners(value);
     }
 

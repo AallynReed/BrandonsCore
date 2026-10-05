@@ -163,9 +163,9 @@ public record TargetPos(Vector3 pos, ResourceKey<Level> dimension, Optional<Vect
 
     public static TargetPos readFromNBT(CompoundTag nbt) {
         Vector3 pos = Vector3.fromNBT(nbt);
-        ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(nbt.getString("dim")));
+        ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(nbt.getStringOr("dim", "")));
         if (nbt.contains("facing_x")) {
-            return new TargetPos(pos, dimension, Optional.of(new Vector2(nbt.getDouble("facing_x"), nbt.getDouble("facing_y"))));
+            return new TargetPos(pos, dimension, Optional.of(new Vector2(nbt.getDoubleOr("facing_x", 0), nbt.getDoubleOr("facing_y", 0))));
         }
         return new TargetPos(pos, dimension, Optional.empty());
     }

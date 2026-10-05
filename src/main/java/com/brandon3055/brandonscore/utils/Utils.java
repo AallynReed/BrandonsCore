@@ -591,7 +591,7 @@ public class Utils {
 
     @Deprecated
     public static BlockPos readBlockPos(CompoundTag p_129240_) {
-        return new BlockPos(p_129240_.getInt("X"), p_129240_.getInt("Y"), p_129240_.getInt("Z"));
+        return new BlockPos(p_129240_.getIntOr("X", 0), p_129240_.getIntOr("Y", 0), p_129240_.getIntOr("Z", 0));
     }
 
     public static void loadOptionalMod(String modid, Supplier<Runnable> runnable) {

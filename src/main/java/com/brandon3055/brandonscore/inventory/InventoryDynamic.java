@@ -163,7 +163,7 @@ public class InventoryDynamic implements Container {
     }
 
     public void readFromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        ListTag list = compound.getList("InvItems", 10);
+        ListTag list = compound.getListOrEmpty("InvItems");
         stacks.clear();
 
         for (int i = 0; i < list.size(); i++) {

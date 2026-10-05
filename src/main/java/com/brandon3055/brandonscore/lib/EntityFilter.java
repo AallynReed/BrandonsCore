@@ -111,11 +111,11 @@ public abstract class EntityFilter {
     }
 
     public CompoundTag readFromNBT(CompoundTag compound) {
-        detectPassive = compound.getBoolean("detectPassive");
-        detectHostile = compound.getBoolean("detectHostile");
-        detectPlayer = compound.getBoolean("detectPlayer");
-        detectOther = compound.getBoolean("detectOther");
-        isWhiteList = compound.getBoolean("isWhiteList");
+        detectPassive = compound.getBooleanOr("detectPassive", false);
+        detectHostile = compound.getBooleanOr("detectHostile", false);
+        detectPlayer = compound.getBooleanOr("detectPlayer", false);
+        detectOther = compound.getBooleanOr("detectOther", false);
+        isWhiteList = compound.getBooleanOr("isWhiteList", false);
 //
 //        if (compound.hasKey("entityList")) {
 //            entityList.clear();
@@ -152,16 +152,16 @@ public abstract class EntityFilter {
 
     public void receiveConfigFromClient(CompoundTag compound) {
         if (isTypeSelectionEnabled()) {
-            detectPassive = compound.getBoolean("detectPassive");
-            detectHostile = compound.getBoolean("detectHostile");
-            detectPlayer = compound.getBoolean("detectPlayer");
+            detectPassive = compound.getBooleanOr("detectPassive", false);
+            detectHostile = compound.getBooleanOr("detectHostile", false);
+            detectPlayer = compound.getBooleanOr("detectPlayer", false);
         }
 
         if (isOtherSelectorEnabled()) {
-            detectOther = compound.getBoolean("detectOther");
+            detectOther = compound.getBooleanOr("detectOther", false);
         }
         if (isListEnabled()) {
-            isWhiteList = compound.getBoolean("isWhiteList");
+            isWhiteList = compound.getBooleanOr("isWhiteList", false);
 
 //            if (compound.hasKey("entityList")) {
 //                entityList.clear();

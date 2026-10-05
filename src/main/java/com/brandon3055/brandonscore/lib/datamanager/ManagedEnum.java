@@ -115,8 +115,8 @@ public class ManagedEnum<T extends Enum<T>> extends AbstractManagedData<T> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        if (compound.contains(name, 10)) {
-            CompoundTag nbt = compound.getCompound(name);
+        if (compound.getCompound(name).isPresent()) {
+            CompoundTag nbt = compound.getCompoundOrEmpty(name);
             if (nbt.contains("null")) {
                 value = null;
             } else {

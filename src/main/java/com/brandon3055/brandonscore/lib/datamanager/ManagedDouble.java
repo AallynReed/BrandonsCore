@@ -91,7 +91,7 @@ public class ManagedDouble extends AbstractManagedData<Double> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getDouble(name);
+        value = compound.getDoubleOr(name, 0);
         notifyListeners(value);
     }
 

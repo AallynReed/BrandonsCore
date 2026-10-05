@@ -83,7 +83,7 @@ public class ManagedNBTSerializableMap extends AbstractManagedData {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        CompoundTag tags = compound.getCompound(name);
+        CompoundTag tags = compound.getCompoundOrEmpty(name);
         for (String name : new ArrayList<>(valueMap.keySet())) {
             if (tags.contains(name)) {
                 valueMap.get(name).deserializeNBT(registryAccess, tags.getCompound(name));

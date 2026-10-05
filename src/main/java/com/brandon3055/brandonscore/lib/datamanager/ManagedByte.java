@@ -90,7 +90,7 @@ public class ManagedByte extends AbstractManagedData<Byte> {
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = compound.getByte(name);
+        value = compound.getByteOr(name, (byte) 0);
         notifyListeners(value);
     }
 
