@@ -28,6 +28,7 @@ println "Using Neoforge: ${neo_version}, for Minecraft: ${mc_version}"
 
 minecraft {
     accessTransformers.file file("src/main/resources/META-INF/accesstransformer.cfg")
+    interfaceInjections.consume "io.codechicken:CodeChickenLib:${mc_version}-${ccl_version}"
 }
 
 runs {
