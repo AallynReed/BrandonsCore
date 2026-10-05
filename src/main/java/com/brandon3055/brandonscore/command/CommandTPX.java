@@ -13,15 +13,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.RelativeMovement;
-import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -76,7 +72,7 @@ public class CommandTPX {
 
     private static int teleportToEntity(CommandSourceStack source, Collection<? extends Entity> targets, Entity destination) {
         for (Entity entity : targets) {
-            teleport(source, entity, (ServerLevel) destination.level(), destination.getX(), destination.getY(), destination.getZ(), EnumSet.noneOf(RelativeMovement.class), destination.getYRot(), destination.getXRot());
+            teleport(source, entity, (ServerLevel) destination.level(), destination.getX(), destination.getY(), destination.getZ(), EnumSet.noneOf(Relative.class), destination.getYRot(), destination.getXRot());
         }
 
         if (targets.size() == 1) {
@@ -117,29 +113,29 @@ public class CommandTPX {
 
         Vec3 vec3d = position.getPosition(source);
         Vec2 vec2f = rotationIn == null ? null : rotationIn.getRotation(source);
-        Set<RelativeMovement> set = EnumSet.noneOf(RelativeMovement.class);
+        Set<Relative> set = EnumSet.noneOf(Relative.class);
         if (position.isXRelative()) {
-            set.add(RelativeMovement.X);
+            set.add(Relative.X);
         }
 
         if (position.isYRelative()) {
-            set.add(RelativeMovement.Y);
+            set.add(Relative.Y);
         }
 
         if (position.isZRelative()) {
-            set.add(RelativeMovement.Z);
+            set.add(Relative.Z);
         }
 
         if (rotationIn == null) {
-            set.add(RelativeMovement.X_ROT);
-            set.add(RelativeMovement.Y_ROT);
+            set.add(Relative.X_ROT);
+            set.add(Relative.Y_ROT);
         } else {
             if (rotationIn.isXRelative()) {
-                set.add(RelativeMovement.X_ROT);
+                set.add(Relative.X_ROT);
             }
 
             if (rotationIn.isYRelative()) {
-                set.add(RelativeMovement.Y_ROT);
+                set.add(Relative.Y_ROT);
             }
         }
 
@@ -160,43 +156,14 @@ public class CommandTPX {
         return targets.size();
     }
 
-    private static void teleport(CommandSourceStack source, Entity entityIn, ServerLevel worldIn, double x, double y, double z, Set<RelativeMovement> relativeList, float yaw, float pitch) {
-        if (entityIn instanceof ServerPlayer) {
-            ChunkPos chunkpos = new ChunkPos(BlockPos.containing(x, y, z));
-            worldIn.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, entityIn.getId());
-            entityIn.stopRiding();
-            if (((ServerPlayer) entityIn).isSleeping()) {
-                ((ServerPlayer) entityIn).stopSleeping();
-            }
-
-            if (worldIn == entityIn.level()) {
-                ((ServerPlayer) entityIn).connection.teleport(x, y, z, yaw, pitch, relativeList);
-            } else {
-                ((ServerPlayer) entityIn).teleportTo(worldIn, x, y, z, yaw, pitch);
-            }
-
-            entityIn.setYHeadRot(yaw);
-        } else {
-            float wrapYaw = Mth.wrapDegrees(yaw);
-            float wrapPitch = Mth.wrapDegrees(pitch);
-            wrapPitch = Mth.clamp(wrapPitch, -90.0F, 90.0F);
-            if (worldIn == entityIn.level()) {
-                entityIn.snapTo(x, y, z, wrapYaw, wrapPitch);
-                entityIn.setYHeadRot(wrapYaw);
-            } else {
-                entityIn.unRide();
-                entityIn.changeDimension(new DimensionTransition(worldIn, new Vec3(x, y, z), entityIn.getDeltaMovement(), wrapYaw, wrapPitch, DimensionTransition.DO_NOTHING));
-                Entity entity = entityIn;
-                entityIn = entityIn.getType().create(worldIn);
-                if (entityIn == null) {
-                    return;
-                }
-
-                entityIn.restoreFrom(entity);
-                entityIn.snapTo(x, y, z, wrapYaw, wrapPitch);
-                entityIn.setYHeadRot(wrapYaw);
-                worldIn.addDuringTeleport(entityIn);
-            }
+    private static void teleport(CommandSourceStack source, Entity entityIn, ServerLevel worldIn, double x, double y, double z, Set<Relative> relativeList, float yaw, float pitch) {
+        double relX = relativeList.contains(Relative.X) ? x - entityIn.getX() : x;
+        double relY = relativeList.contains(Relative.Y) ? y - entityIn.getY() : y;
+        double relZ = relativeList.contains(Relative.Z) ? z - entityIn.getZ() : z;
+        float relYaw = relativeList.contains(Relative.Y_ROT) ? yaw - entityIn.getYRot() : yaw;
+        float relPitch = relativeList.contains(Relative.X_ROT) ? pitch - entityIn.getXRot() : pitch;
+        if (!entityIn.teleportTo(worldIn, relX, relY, relZ, relativeList, Mth.wrapDegrees(relYaw), Mth.wrapDegrees(relPitch), true)) {
+            return;
         }
 
         if (!(entityIn instanceof LivingEntity) || !((LivingEntity) entityIn).isFallFlying()) {
