@@ -62,7 +62,7 @@ public class BlockToStackHelper {
         itemCollection = new ArrayList<>();
 
         BlockEntity tile = world.getBlockEntity(pos);
-        if (state.onDestroyedByPlayer(world, pos, player, true, world.getFluidState(pos))){
+        if (state.onDestroyedByPlayer(world, pos, player, player.getMainHandItem(), true, world.getFluidState(pos))){
             block.destroy(world, pos, state);
             block.playerDestroy(world, player, pos, state, tile, player.getMainHandItem());
         }
