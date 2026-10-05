@@ -1,7 +1,7 @@
 package com.brandon3055.brandonscore.utils;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -24,11 +24,11 @@ public class InfoHelper {
 
 
     private static boolean isShiftKeyDown() {
-        return Screen.hasShiftDown();
+        return Minecraft.getInstance().hasShiftDown();
     }
 
     private static boolean isCtrlKeyDown() {
-        return Screen.hasControlDown();
+        return Minecraft.getInstance().hasControlDown();
     }
 
     public static boolean holdShiftForDetails(List<Component> list, boolean inverted) {

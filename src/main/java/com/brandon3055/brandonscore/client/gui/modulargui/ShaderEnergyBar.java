@@ -17,7 +17,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -57,7 +57,7 @@ public class ShaderEnergyBar extends GuiEnergyBar {
         return (energy, capacity) -> {
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(Component.translatable("mod_gui.brandonscore.energy_bar.operational_potential").withStyle(DARK_AQUA));
-            boolean shift = Screen.hasShiftDown();
+            boolean shift = Minecraft.getInstance().hasShiftDown();
             tooltip.add(Component.translatable("mod_gui.brandonscore.energy_bar.capacity")
                     .withStyle(GOLD)
                     .append(" ")
@@ -85,7 +85,7 @@ public class ShaderEnergyBar extends GuiEnergyBar {
             );
             if (storage != null && storage.getIOInfo() != null) {
                 IOInfo ioInfo = storage.getIOInfo();
-                if (Screen.hasShiftDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     tooltip.add(Component.translatable("mod_gui.brandonscore.energy_bar.input")
                             .withStyle(GOLD)
                             .append(Component.literal(" +")

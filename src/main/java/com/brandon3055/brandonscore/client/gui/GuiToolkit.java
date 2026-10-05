@@ -13,7 +13,7 @@ import com.brandon3055.brandonscore.client.gui.modulargui.ShaderEnergyBar;
 import com.brandon3055.brandonscore.client.gui.modulargui.ShaderEnergyBar.EnergyBar;
 import com.brandon3055.brandonscore.lib.IRSSwitchable;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
@@ -176,7 +176,7 @@ public class GuiToolkit {
         GuiTexture icon = new GuiTexture(button, () -> BCGuiTextures.get("redstone/" + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
         Constraints.bind(icon, button);
         button.setTooltipSingle(() -> translateInternal("rs_mode." + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
-        button.onPress(() -> switchable.setRSMode(switchable.getRSMode().next(Screen.hasShiftDown())), GuiButton.LEFT_CLICK);
+        button.onPress(() -> switchable.setRSMode(switchable.getRSMode().next(Minecraft.getInstance().hasShiftDown())), GuiButton.LEFT_CLICK);
         button.onPress(() -> switchable.setRSMode(switchable.getRSMode().next(true)), GuiButton.RIGHT_CLICK);
         return button;
     }
