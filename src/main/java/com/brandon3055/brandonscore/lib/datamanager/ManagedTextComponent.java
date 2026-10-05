@@ -2,9 +2,12 @@ package com.brandon3055.brandonscore.lib.datamanager;
 
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -97,14 +100,14 @@ public class ManagedTextComponent extends AbstractManagedData<Component> {
     @Override
     public void toNBT(HolderLookup.Provider provider, CompoundTag compound) {
         if (value != null) {
-            compound.putString(name, Component.Serializer.toJson(value, provider));
+            compound.putString(name, ComponentSerialization.CODEC.encodeStart(provider.createSerializationContext(JsonOps.INSTANCE), value).getOrThrow().toString());
         }
     }
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
         if (compound.contains(name)) {
-            value = Component.Serializer.fromJson(compound.getString(name), provider);
+            value = ComponentSerialization.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), JsonParser.parseString(compound.getStringOr(name, ""))).getOrThrow();
         } else {
             value = null;
         }
