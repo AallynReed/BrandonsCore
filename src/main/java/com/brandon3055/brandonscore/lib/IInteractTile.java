@@ -3,7 +3,6 @@ package com.brandon3055.brandonscore.lib;
 import com.brandon3055.brandonscore.blocks.BlockBCore;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +20,8 @@ public interface IInteractTile {
      * Passed through from Block#useItemOn, Despite what the name may suggest, this method gets called regardless of weather the player is holding an item or not.
      * The stack will simply be empty if the player is not holding an item.
      */
-    default ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Player player, InteractionHand hand, BlockHitResult hit) {
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    default InteractionResult useItemOn(ItemStack stack, BlockState state, Player player, InteractionHand hand, BlockHitResult hit) {
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     /**
