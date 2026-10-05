@@ -2,30 +2,31 @@ package com.brandon3055.brandonscore.client.gui.modulargui;
 
 import codechicken.lib.gui.modular.elements.GuiEnergyBar;
 import codechicken.lib.gui.modular.elements.GuiRectangle;
-import codechicken.lib.gui.modular.lib.GuiRender;
 import codechicken.lib.gui.modular.lib.geometry.GuiParent;
-import codechicken.lib.gui.modular.sprite.Material;
-import codechicken.lib.render.buffer.TransformingVertexConsumer;
+import codechicken.lib.math.MathHelper;
 import codechicken.lib.util.FormatUtil;
+import com.brandon3055.brandonscore.BrandonsCore;
 import com.brandon3055.brandonscore.api.power.IOInfo;
 import com.brandon3055.brandonscore.api.power.IOPStorage;
+import com.brandon3055.brandonscore.client.BCClientEventHandler;
 import com.brandon3055.brandonscore.client.BCGuiTextures;
 import com.brandon3055.brandonscore.client.shader.BCShaders;
 import com.brandon3055.brandonscore.utils.EnergyUtils;
 import com.brandon3055.brandonscore.utils.Utils;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.render.TextureSetup;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2f;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,12 +40,10 @@ import static net.minecraft.ChatFormatting.*;
  * Created by brandon3055 on 13/02/2024
  */
 public class ShaderEnergyBar extends GuiEnergyBar {
-    private static final RenderType SHADER_TYPE = RenderType.create("starfield", DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS, 256, false, false,
-            RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> BCShaders.energyBarShader))
-                    .setTextureState(new RenderStateShard.TextureStateShard(BCGuiTextures.TEXTURES.getAtlasHolder().atlasLocation(), false, false))
-                    .createCompositeState(false)
-    );
+    private static final RenderPipeline TEX_COL_NO_CULL = RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "pipeline/gui_textured_no_cull"))
+            .withCull(false)
+            .build();
 
     private Supplier<Boolean> shaderEnabled = () -> true;
     private Supplier<Boolean> disabled = () -> false;
@@ -141,7 +140,7 @@ public class ShaderEnergyBar extends GuiEnergyBar {
     }
 
     @Override
-    public void renderBackground(GuiRender render, double mouseX, double mouseY, float partialTicks) {
+    public void renderBehind(GuiGraphicsExtractor graphics, double mouseX, double mouseY, float partialTicks) {
         boolean horizontal = xSize() > ySize();
         double barLength = horizontal ? xSize() : ySize();
         double barWidth = horizontal ? ySize() : xSize();
@@ -158,45 +157,44 @@ public class ShaderEnergyBar extends GuiEnergyBar {
             double x = posY;
             posY = posX;
             posX = x;
-            render.pose().pushPose();
-            render.pose().translate(barLength + (posY * 2), 0, 0);
-            render.pose().mulPose(Axis.ZP.rotationDegrees(90));
+            graphics.pose().pushMatrix();
+            graphics.pose().translate((float) (barLength + (posY * 2)), 0);
+            graphics.pose().rotate((float) (90 * MathHelper.torad));
         }
 
-        MultiBufferSource.BufferSource getter = render.buffers();
+        double x = posX;
+        double y = posY;
         if (disabled.get()) {
-            render.rect(posX, posY, barWidth, barLength, 0xFF000000);
+            graphics.cc$fill(x, y, x + barWidth, y + barLength, 0xFF000000);
         } else if (!shaderEnabled.get()) {
-            Material matBase = BCGuiTextures.get("bars/energy_empty");
-            Material matOverlay = BCGuiTextures.get("bars/energy_full");
-            VertexConsumer shaderConsumer = new TransformingVertexConsumer(matBase.buffer(getter, GuiRender::texColType), render.pose());
-            sliceSprite(shaderConsumer, posX, posY, barWidth, barLength, matBase.sprite());
-            sliceSprite(shaderConsumer, posX, posY + barLength - draw, barWidth, draw, matOverlay.sprite());
+            TextureAtlasSprite base = BCGuiTextures.get("bars/energy_empty").get();
+            TextureAtlasSprite overlay = BCGuiTextures.get("bars/energy_full").get();
+            AbstractTexture atlas = mc().getTextureManager().getTexture(BCGuiTextures.ATLAS_TEXTURE);
+            graphics.cc$submitCustom(TEX_COL_NO_CULL, TextureSetup.singleTexture(atlas.getTextureView(), atlas.getSampler()), x, x + barWidth, y, y + barLength, (buffer, pose) -> {
+                sliceSprite(buffer, pose, x, y, barWidth, barLength, base);
+                sliceSprite(buffer, pose, x, y + barLength - draw, barWidth, draw, overlay);
+            });
         } else {
             Rectangle rect = toScreenSpace(xMin(), yMin(), xSize(), ySize());
-            BCShaders.energyBarCharge.glUniform1f((float) charge * 1.01F);
-            BCShaders.energyBarEPos.glUniform2i(rect.x, rect.y);
-            BCShaders.energyBarESize.glUniform2i(rect.width, rect.height);
-            BCShaders.energyBarScreenSize.glUniform2i(mc().getWindow().getWidth(), mc().getWindow().getHeight());
-            VertexConsumer shaderConsumer = new TransformingVertexConsumer(getter.getBuffer(SHADER_TYPE), render.pose());
-            drawShaderRect(shaderConsumer, (float) posX, (float) posY, (float) barWidth, (float) barLength);
+            float shaderCharge = (float) charge * 1.01F;
+            float time = BCClientEventHandler.elapsedTicks / 10F;
+            graphics.cc$submitCustom(BCShaders.ENERGY_BAR, TextureSetup.noTexture(), x, x + barWidth, y, y + barLength, (buffer, pose) -> drawShaderRect(buffer, pose, (float) x, (float) y, (float) barWidth, (float) barLength, shaderCharge, time, rect));
         }
-        getter.endBatch();
         if (horizontal) {
-            render.pose().popPose();
+            graphics.pose().popMatrix();
         }
     }
 
-    private void drawShaderRect(VertexConsumer buffer, float x, float y, float width, float height) {
+    private void drawShaderRect(VertexConsumer buffer, Matrix3x2f pose, float x, float y, float width, float height, float charge, float time, Rectangle rect) {
         //@formatter:off
-        buffer.addVertex(x,          y + height, 0);
-        buffer.addVertex(x + width,  y + height, 0);
-        buffer.addVertex(x + width,  y,          0);
-        buffer.addVertex(x,          y,          0);
+        buffer.addVertexWith2DPose(pose, x,          y + height).setUv(charge, time).setUv1(rect.x, rect.y).setUv2(rect.width, rect.height);
+        buffer.addVertexWith2DPose(pose, x + width,  y + height).setUv(charge, time).setUv1(rect.x, rect.y).setUv2(rect.width, rect.height);
+        buffer.addVertexWith2DPose(pose, x + width,  y         ).setUv(charge, time).setUv1(rect.x, rect.y).setUv2(rect.width, rect.height);
+        buffer.addVertexWith2DPose(pose, x,          y         ).setUv(charge, time).setUv1(rect.x, rect.y).setUv2(rect.width, rect.height);
         //@formatter:on
     }
 
-    public void sliceSprite(VertexConsumer buffer, double xPos, double yPos, double xSize, double ySize, TextureAtlasSprite sprite) {
+    public void sliceSprite(VertexConsumer buffer, Matrix3x2f pose, double xPos, double yPos, double xSize, double ySize, TextureAtlasSprite sprite) {
         float texU = sprite.getU0();
         float texV = sprite.getV0();
         int texWidth = sprite.contents().width();
@@ -205,16 +203,16 @@ public class ShaderEnergyBar extends GuiEnergyBar {
         float vScale = (sprite.getV1() - texV) / texHeight;
         for (double i = 0; i < ySize; i += Math.min(texHeight - 2, ySize - i)) {
             double partSize = Math.min(texHeight, ySize - i);
-            bufferRect(buffer, (float) xPos, (float) yPos + (float) ySize - (float) i, (float) xSize, (float) -partSize, sprite.getU0(), sprite.getV0(), (float) xSize * uScale, (float) partSize * vScale);
+            bufferRect(buffer, pose, (float) xPos, (float) yPos + (float) ySize - (float) i, (float) xSize, (float) -partSize, sprite.getU0(), sprite.getV0(), (float) xSize * uScale, (float) partSize * vScale);
         }
     }
 
-    private void bufferRect(VertexConsumer buffer, float x, float y, float width, float height, float minU, float minV, float tWidth, float tHeight) {
+    private void bufferRect(VertexConsumer buffer, Matrix3x2f pose, float x, float y, float width, float height, float minU, float minV, float tWidth, float tHeight) {
         //@formatter:off
-        buffer.addVertex(x,           y + height, 0).setColor(1F, 1F, 1F, 1F).setUv(minU, minV + tHeight);
-        buffer.addVertex(x + width,   y + height, 0).setColor(1F, 1F, 1F, 1F).setUv(minU + tWidth, minV + tHeight);
-        buffer.addVertex(x + width,   y,          0).setColor(1F, 1F, 1F, 1F).setUv(minU + tWidth, minV);
-        buffer.addVertex(x,           y,          0).setColor(1F, 1F, 1F, 1F).setUv(minU, minV);
+        buffer.addVertexWith2DPose(pose, x,           y + height).setColor(1F, 1F, 1F, 1F).setUv(minU, minV + tHeight);
+        buffer.addVertexWith2DPose(pose, x + width,   y + height).setColor(1F, 1F, 1F, 1F).setUv(minU + tWidth, minV + tHeight);
+        buffer.addVertexWith2DPose(pose, x + width,   y         ).setColor(1F, 1F, 1F, 1F).setUv(minU + tWidth, minV);
+        buffer.addVertexWith2DPose(pose, x,           y         ).setColor(1F, 1F, 1F, 1F).setUv(minU, minV);
         //@formatter:on
     }
 

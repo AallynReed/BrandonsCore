@@ -2,16 +2,21 @@ package com.brandon3055.brandonscore.client.shader;
 
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.render.shader.CCShaderInstance;
-import codechicken.lib.render.shader.CCUniform;
 import codechicken.lib.util.ClientUtils;
 import com.brandon3055.brandonscore.BrandonsCore;
-import com.brandon3055.brandonscore.client.BCClientEventHandler;
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.covers1624.quack.util.CrashLock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 /**
@@ -58,12 +63,19 @@ public class BCShaders {
             .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 40)));
 
-    public static CCShaderInstance energyBarShader;
-    public static CCUniform energyBarTime;
-    public static CCUniform energyBarCharge;
-    public static CCUniform energyBarEPos; //Position on screen in "real" screen pixels
-    public static CCUniform energyBarESize; //Size on screen in "real" screen pixels
-    public static CCUniform energyBarScreenSize; //The resolution of the actual minecraft window
+    public static final VertexFormat ENERGY_BAR_FORMAT = VertexFormat.builder()
+            .add("Position", VertexFormatElement.POSITION)
+            .add("UV0", VertexFormatElement.UV0)
+            .add("UV1", VertexFormatElement.UV1)
+            .add("UV2", VertexFormatElement.UV2)
+            .build();
+    public static final RenderPipeline ENERGY_BAR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "pipeline/energy_bar"))
+            .withVertexShader(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "core/energy_bar"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "core/energy_bar"))
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .withVertexFormat(ENERGY_BAR_FORMAT, VertexFormat.Mode.QUADS)
+            .build();
 
     public static CCShaderInstance posColourTexAlpha0;
 
@@ -78,20 +90,15 @@ public class BCShaders {
         BADGE_CORE_SHADER.register(modBus);
         BADGE_FOIL_SHADER.register(modBus);
 
+        modBus.addListener(BCShaders::onRegisterPipelines);
         modBus.addListener(BCShaders::onRegisterShaders);
     }
 
-    private static void onRegisterShaders(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "energy_bar"), DefaultVertexFormat.POSITION), e -> {
-            energyBarShader = (CCShaderInstance) e;
-            energyBarTime = energyBarShader.getUniform("time");
-            energyBarCharge = energyBarShader.getUniform("charge");
-            energyBarEPos = energyBarShader.getUniform("ePos");
-            energyBarESize = energyBarShader.getUniform("eSize");
-            energyBarScreenSize = energyBarShader.getUniform("screenSize");
-            energyBarShader.onApply(() -> energyBarTime.glUniform1f(BCClientEventHandler.elapsedTicks / 10F));
-        });
+    private static void onRegisterPipelines(RegisterRenderPipelinesEvent event) {
+        event.registerPipeline(ENERGY_BAR);
+    }
 
+    private static void onRegisterShaders(RegisterShadersEvent event) {
         event.registerShader(CCShaderInstance.create(event.getResourceProvider(), Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "position_color_tex_alpha0"), DefaultVertexFormat.POSITION_TEX_COLOR), e -> {
             posColourTexAlpha0 = (CCShaderInstance) e;
         });

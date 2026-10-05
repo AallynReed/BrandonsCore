@@ -2,18 +2,15 @@
 
 #moj_import <brandonscore:math.glsl>
 
-uniform float time;
-uniform float charge;
-uniform ivec2 ePos;
-uniform ivec2 eSize;
-uniform ivec2 screenSize;
-uniform vec4 ColorModulator;
+flat in float time;
+flat in float charge;
+flat in ivec2 ePos;
+flat in ivec2 eSize;
+flat in ivec2 screenSize;
 
 out vec4 fragColor;
 
 vec4 type = vec4[](vec4(0.1, 0.5, 0.8, 1), vec4(0.55, 0.25, 0.65, 1), vec4(0.7, 0.4, 0.2, 1), vec4(0.55, 0.2, 0.1, 0.2))[3];
-float yRes = screenSize.y;
-bool horizontal = eSize.x > eSize.y;
 
 vec2 offset(vec2 uv, float sgn){
     float xMin = gl_FragCoord.x - ePos.x;
@@ -34,6 +31,8 @@ vec2 offsetH(vec2 uv, float sgn){
 }
 
 void main() {
+    float yRes = screenSize.y;
+    bool horizontal = eSize.x > eSize.y;
     float ar = float(screenSize.x) / screenSize.y;
     vec2 uv = gl_FragCoord.xy / screenSize.xy;
     uv.x *= ar;
