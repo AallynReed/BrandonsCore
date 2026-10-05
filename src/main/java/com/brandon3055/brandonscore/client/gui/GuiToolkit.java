@@ -174,7 +174,7 @@ public class GuiToolkit {
         GuiButton button = new GuiButton(parent);
         Constraints.size(button, 12, 12);
         addHoverHighlight(button);
-        GuiTexture icon = new GuiTexture(button, () -> BCGuiTextures.get("redstone/" + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
+        GuiTexture icon = new GuiTexture(button, () -> BCGuiTextures.get("redstone/" + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)).get());
         Constraints.bind(icon, button);
         button.setTooltipSingle(() -> translateInternal("rs_mode." + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
         button.onPress(() -> switchable.setRSMode(switchable.getRSMode().next(Minecraft.getInstance().hasShiftDown())), GuiButton.LEFT_CLICK);
@@ -234,7 +234,7 @@ public class GuiToolkit {
 
     public GuiButton createBorderlessButton(@NotNull GuiParent<?> parent, @Nullable Supplier<Component> label) {
         GuiButton button = new GuiButton(parent);
-        GuiTexture texture = new GuiTexture(button, () -> BCGuiTextures.getThemed("button_borderless" + (button.isPressed() ? "_invert" : "")))
+        GuiTexture texture = new GuiTexture(button, () -> BCGuiTextures.getThemed("button_borderless" + (button.isPressed() ? "_invert" : "")).get())
                 .dynamicTexture();
         GuiRectangle highlight = new GuiRectangle(button).border(() -> button.hoverTime() > 0 ? 0xFFFFFFFF : 0);
         Constraints.bind(texture, button);
