@@ -41,7 +41,7 @@ void main() {
         lightMapColor = vec4(1.0);
     } else {
         vertexColor = minecraft_mix_light(Light0_Direction, Light1_Direction, Normal, Color);
-        lightMapColor = texelFetch(Sampler2, UV2 / 16, 0);
+        lightMapColor = sample_lightmap(Sampler2, UV2);
     }
     if (DisableOverlay) {
         overlayColor = vec4(1.0);
