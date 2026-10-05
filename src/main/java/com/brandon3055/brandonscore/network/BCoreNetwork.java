@@ -1,6 +1,5 @@
 package com.brandon3055.brandonscore.network;
 
-import codechicken.lib.internal.network.ClientConfigurationPacketHandler;
 import codechicken.lib.packet.PacketCustom;
 import codechicken.lib.packet.PacketCustomChannel;
 import codechicken.lib.vec.Vector3;
@@ -44,7 +43,6 @@ public class BCoreNetwork {
     public static final PacketCustomChannel CHANNEL = new PacketCustomChannel(CHANNEL_NAME)
             .optional()
             .versioned(BrandonsCore.container().getModInfo().getVersion().toString())
-            .clientConfiguration(() -> ClientConfigurationPacketHandler::new)
             .client(() -> ClientPacketHandler::new)
             .server(() -> ServerPacketHandler::new);
 
