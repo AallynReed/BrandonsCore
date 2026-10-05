@@ -104,7 +104,7 @@ public record TargetPos(Vector3 pos, ResourceKey<Level> dimension, Optional<Vect
         return "X: " + (int) Math.floor(pos.x) +
                 ", Y: " + (int) Math.floor(pos.y) +
                 ", Z: " + (int) Math.floor(pos.z) +
-                ", " + (fullDim ? dimension.location() : dimension.location().getPath());
+                ", " + (fullDim ? dimension.identifier() : dimension.identifier().getPath());
     }
 
 //    public TargetPos setIncludeHeading(boolean includeHeading) {
@@ -149,7 +149,7 @@ public record TargetPos(Vector3 pos, ResourceKey<Level> dimension, Optional<Vect
 
     public CompoundTag writeToNBT(CompoundTag nbt) {
         pos.writeToNBT(nbt);
-        nbt.putString("dim", dimension.location().toString());
+        nbt.putString("dim", dimension.identifier().toString());
         facing.ifPresent(e -> {
             nbt.putDouble("facing_x", e.x);
             nbt.putDouble("facing_y", e.y);
@@ -172,7 +172,7 @@ public record TargetPos(Vector3 pos, ResourceKey<Level> dimension, Optional<Vect
 
     public void write(MCDataOutput output) {
         output.writeVector(pos);
-        output.writeResourceLocation(dimension.location());
+        output.writeResourceLocation(dimension.identifier());
         output.writeBoolean(facing.isPresent());
         facing.ifPresent(e -> {
             output.writeDouble(e.x);

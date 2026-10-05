@@ -659,7 +659,7 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
 
     public void debug(Object text) {
         if (debugEnabled()) {
-            LOGGER.info("TileDebug:" + getBlockPos() + ", " + getLevel().dimension().location() + ": " + text);
+            LOGGER.info("TileDebug:" + getBlockPos() + ", " + getLevel().dimension().identifier() + ": " + text);
         }
     }
 
