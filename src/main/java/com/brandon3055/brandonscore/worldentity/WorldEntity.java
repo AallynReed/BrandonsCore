@@ -1,6 +1,7 @@
 package com.brandon3055.brandonscore.worldentity;
 
 import com.brandon3055.brandonscore.utils.LogHelperBC;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -66,14 +67,12 @@ public abstract class WorldEntity {
             throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
         } else {
             nbt.putString("id", resourcelocation.toString());
-            nbt.putUUID("UUID", this.getUniqueID());
+            nbt.store("UUID", UUIDUtil.CODEC, this.getUniqueID());
         }
     }
 
     private void readInternal(CompoundTag nbt) {
-        if (nbt.hasUUID("UUID")) {
-            this.uniqueID = nbt.getUUID("UUID");
-        }
+        nbt.read("UUID", UUIDUtil.CODEC).ifPresent(uuid -> this.uniqueID = uuid);
     }
 
 

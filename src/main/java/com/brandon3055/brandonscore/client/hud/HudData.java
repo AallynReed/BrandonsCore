@@ -79,7 +79,7 @@ public class HudData {
             for (Map.Entry<String, JsonElement> entry : element.entrySet()) {
                 Identifier key = Identifier.parse(entry.getKey());
                 if (hudElements.containsKey(key)) {
-                    CompoundTag nbt = TagParser.parseTag(entry.getValue().getAsString());
+                    CompoundTag nbt = TagParser.parseCompoundFully(entry.getValue().getAsString());
                     hudElements.get(key).readNBT(nbt);
                 }
             }

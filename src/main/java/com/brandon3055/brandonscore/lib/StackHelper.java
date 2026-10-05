@@ -140,7 +140,7 @@ public class StackHelper {
         if (!componentPatch.isEmpty()) {
             Tag tag = DataComponentPatch.CODEC.encodeStart(registryOps, componentPatch).result().orElseGet(CompoundTag::new);
             if (tag instanceof CompoundTag compound && !compound.isEmpty()) {
-                stackString = stackString + "[" + compound.getAllKeys().stream().map(key -> key + "=" + compound.get(key)).collect(Collectors.joining(",")) + "]";
+                stackString = stackString + "[" + compound.keySet().stream().map(key -> key + "=" + compound.get(key)).collect(Collectors.joining(",")) + "]";
             }
         }
 

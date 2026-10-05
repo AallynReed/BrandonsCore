@@ -116,7 +116,7 @@ public class StringyStacks {
             } else {
                 String tag = stackStr.substring(0, stackStr.lastIndexOf("}") + 1);
                 try {
-                    tagNBT = TagParser.parseTag(tag);
+                    tagNBT = TagParser.parseCompoundFully(tag);
                 }
                 catch (Throwable e) {
                     LOGGER.warn("Failed to parse stack nbt from string - " + tag + ", on stack string - " + stackString + ". error: " + e.getMessage());
@@ -229,7 +229,7 @@ public class StringyStacks {
         }
         if (!nbt.isEmpty()) {
             try {
-                compound = TagParser.parseTag(nbt);
+                compound = TagParser.parseCompoundFully(nbt);
             }
             catch (Exception e) {
                 LOGGER.warn("Failed to parse stack nbt from string - " + nbt + " error: " + e.getMessage());

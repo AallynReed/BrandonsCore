@@ -237,7 +237,7 @@ public class OPStorage implements INBTSerializable<CompoundTag>, IValueHashable<
     private long smartRead(String name, CompoundTag compound) {
         Tag tag = compound.get(name);
         if (tag instanceof NumericTag) {
-            return ((NumericTag) tag).getAsLong();
+            return ((NumericTag) tag).longValue();
         }
         return 0;
     }

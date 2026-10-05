@@ -3,6 +3,7 @@ package com.brandon3055.brandonscore.lib.datamanager;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -99,14 +100,14 @@ public class ManagedUUID extends AbstractManagedData<UUID> {
     @Override
     public void toNBT(HolderLookup.Provider provider, CompoundTag compound) {
         if (value != null) {
-            compound.putUUID(name, value);
+            compound.store(name, UUIDUtil.CODEC, value);
         }
     }
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
         if (compound.contains(name)) {
-            value = compound.getUUID(name);
+            value = compound.read(name, UUIDUtil.CODEC).orElseThrow();
         } else {
             value = null;
         }
