@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
@@ -125,7 +126,7 @@ public class ClientPacketHandler implements ICustomPacketHandler.IClientPacketHa
         int ownerId = packet.readVarInt();
         Vec3 velocity = new Vec3(packet.readFloat(), packet.readFloat(), packet.readFloat());
 
-        Entity entity = type.create(mc.level);
+        Entity entity = type.create(mc.level, EntitySpawnReason.LOAD);
         if (entity == null) {
             return;
         }
@@ -156,7 +157,7 @@ public class ClientPacketHandler implements ICustomPacketHandler.IClientPacketHa
         Entity entity = mc.level.getEntity(entityID);
         if (entity != null) {
             Vector3f motion = packet.readVec3f();
-            entity.lerpMotion(motion.x(), motion.y(), motion.z());
+            entity.lerpMotion(new Vec3(motion.x(), motion.y(), motion.z()));
             if (packet.readBoolean()) {
                 entity.setXRot(packet.readFloat());
                 entity.setYRot(packet.readFloat());
@@ -175,6 +176,6 @@ public class ClientPacketHandler implements ICustomPacketHandler.IClientPacketHa
         Vector3 motion = packet.readVector();
         boolean distanceOverride = packet.readBoolean();
         ;
-        mc.level.addParticle(data, distanceOverride, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
+        mc.level.addParticle(data, distanceOverride, false, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
     }
 }
