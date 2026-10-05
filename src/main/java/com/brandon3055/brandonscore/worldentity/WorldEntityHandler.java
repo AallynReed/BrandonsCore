@@ -8,7 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -67,7 +66,7 @@ public class WorldEntityHandler {
             WORLD_ENTITY_MAP.remove(key);
         }
 
-        WorldEntitySaveData data = world.getDataStorage().computeIfAbsent(new SavedData.Factory<>(WorldEntitySaveData::new, WorldEntitySaveData::load), WorldEntitySaveData.FILE_ID);
+        WorldEntitySaveData data = world.getDataStorage().computeIfAbsent(WorldEntitySaveData.TYPE);
         data.setSaveCallback(() -> handleSave(data, key));
         for (WorldEntity entity : data.getEntities()) {
             addWorldEntity(world, entity);

@@ -1,12 +1,13 @@
 package com.brandon3055.brandonscore.worldentity;
 
-import net.minecraft.core.HolderLookup;
+import com.brandon3055.brandonscore.BrandonsCore;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public class WorldEntitySaveData extends SavedData {
     public static final String FILE_ID = "brandonscore_world_entity";
+    public static final SavedDataType<WorldEntitySaveData> TYPE = new SavedDataType<>(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "world_entity"), WorldEntitySaveData::new, CompoundTag.CODEC.xmap(WorldEntitySaveData::load, WorldEntitySaveData::save));
     private List<WorldEntity> entities = new ArrayList<>();
     private Runnable saveCallback;
 
@@ -33,7 +35,7 @@ public class WorldEntitySaveData extends SavedData {
         return entities;
     }
 
-    public static WorldEntitySaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
+    public static WorldEntitySaveData load(CompoundTag nbt) {
         WorldEntitySaveData data = new WorldEntitySaveData();
         ListTag list = nbt.getListOrEmpty("entities");
         for (Tag inbt : list) {
@@ -45,8 +47,9 @@ public class WorldEntitySaveData extends SavedData {
         return data;
     }
 
-    @Override
-    public CompoundTag save(CompoundTag compound, HolderLookup.Provider provider) {
+    private CompoundTag save() {
+        saveCallback.run();
+        CompoundTag compound = new CompoundTag();
         ListTag list = new ListTag();
         for (WorldEntity entity : entities) {
             CompoundTag entityTag = new CompoundTag();
@@ -58,9 +61,7 @@ public class WorldEntitySaveData extends SavedData {
     }
 
     @Override
-    public void save(File fileIn, HolderLookup.Provider provider) {
-        setDirty(true);
-        saveCallback.run();
-        super.save(fileIn, provider);
+    public boolean isDirty() {
+        return true;
     }
 }
