@@ -3,6 +3,7 @@ package com.brandon3055.brandonscore.multiblock;
 import codechicken.lib.packet.PacketCustom;
 import codechicken.lib.vec.Quat;
 import codechicken.lib.vec.Rotation;
+import com.brandon3055.brandonscore.BrandonsCore;
 import com.brandon3055.brandonscore.network.BCoreNetwork;
 import com.brandon3055.brandonscore.utils.Utils;
 import com.google.common.collect.ImmutableList;
@@ -13,17 +14,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +42,7 @@ import static codechicken.lib.math.MathHelper.torad;
 /**
  * Created by brandon3055 on 26/06/2022
  */
-public class MultiBlockManager extends SimpleJsonResourceReloadListener {
+public class MultiBlockManager extends SimpleJsonResourceReloadListener<JsonElement> {
     private static final Logger LOGGER = LogManager.getLogger(MultiBlockManager.class);
     public static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     /**
@@ -54,7 +57,7 @@ public class MultiBlockManager extends SimpleJsonResourceReloadListener {
     private static final Map<Identifier, MultiBlockDefinition> SERVER_DEFINITIONS = new HashMap<>();
 
     public MultiBlockManager() {
-        super(GSON, "multiblocks");
+        super(ExtraCodecs.JSON, FileToIdConverter.json("multiblocks"));
     }
 
     public static void init() {
@@ -63,8 +66,8 @@ public class MultiBlockManager extends SimpleJsonResourceReloadListener {
         Utils.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> NeoForge.EVENT_BUS.addListener(MultiBlockManager::onSendDataToClient));
     }
 
-    public static void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new MultiBlockManager());
+    public static void addReloadListeners(AddServerReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "multiblocks"), new MultiBlockManager());
     }
 
     private static void onSendDataToClient(OnDatapackSyncEvent event) {
