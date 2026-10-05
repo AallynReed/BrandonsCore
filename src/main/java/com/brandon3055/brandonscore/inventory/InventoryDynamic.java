@@ -7,6 +7,7 @@ import net.covers1624.quack.collection.FastStream;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -155,7 +156,7 @@ public class InventoryDynamic implements Container {
         for (ItemStack stack : stacks) {
             if (!stack.isEmpty() && stack.getCount() > 0) {
                 CompoundTag tag = new CompoundTag();
-                list.add(stack.save(provider, tag));
+                list.add(ItemStack.CODEC.encode(stack, provider.createSerializationContext(NbtOps.INSTANCE), tag).getOrThrow());
             }
         }
 
@@ -167,7 +168,7 @@ public class InventoryDynamic implements Container {
         stacks.clear();
 
         for (int i = 0; i < list.size(); i++) {
-            stacks.add(ItemStack.parseOptional(provider, list.getCompound(i)));
+            stacks.add(ItemStack.OPTIONAL_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), list.getCompoundOrEmpty(i)).result().orElse(ItemStack.EMPTY));
         }
     }
 

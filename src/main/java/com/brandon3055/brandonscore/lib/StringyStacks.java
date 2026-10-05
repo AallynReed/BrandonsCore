@@ -3,6 +3,7 @@ package com.brandon3055.brandonscore.lib;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -155,7 +156,7 @@ public class StringyStacks {
             }
         }
 
-        ItemStack stack = ItemStack.parseOptional(provider, stackNBT);
+        ItemStack stack = ItemStack.OPTIONAL_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), stackNBT).result().orElse(ItemStack.EMPTY);
         if (stack == ItemStack.EMPTY) { //Specifically comparing to the EMPTY instance as that instance will be returned if an error occurs while loading the stack from NBT.
             return defaultIfInputInvalid;
         }
@@ -266,7 +267,7 @@ public class StringyStacks {
         String stackString = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
 
         if (withNBT || withForgeCaps) {
-            CompoundTag stackTag = (CompoundTag) stack.saveOptional(provider);
+            CompoundTag stackTag = (CompoundTag) ItemStack.OPTIONAL_CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), stack).getOrThrow();
             CompoundTag nbt = null;
             CompoundTag caps = null;
             if (withNBT && stackTag.getCompound("tag").isPresent()) {

@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -113,7 +114,7 @@ public class TileItemStackHandler extends ItemStackHandler {
             if (!stacks.get(i).isEmpty()) {
                 CompoundTag itemTag = new CompoundTag();
                 itemTag.putInt("Slot", i);
-                nbtTagList.add(stacks.get(i).save(provider, itemTag));
+                nbtTagList.add(ItemStack.CODEC.encode(stacks.get(i), provider.createSerializationContext(NbtOps.INSTANCE), itemTag).getOrThrow());
             }
         }
         CompoundTag nbt = new CompoundTag();
@@ -130,7 +131,7 @@ public class TileItemStackHandler extends ItemStackHandler {
             int slot = itemTags.getIntOr("Slot", 0);
 
             if (slot >= 0 && slot < stacks.size()) {
-                stacks.set(slot, ItemStack.parseOptional(provider, itemTags));
+                stacks.set(slot, ItemStack.OPTIONAL_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), itemTags).result().orElse(ItemStack.EMPTY));
             }
         }
         onLoad();

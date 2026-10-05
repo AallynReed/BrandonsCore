@@ -4,6 +4,7 @@ import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -172,7 +173,7 @@ public class FilterItem extends FilterBase {
         compound.putBoolean("whitelist_mode", whitelistMode);
         compound.putString("tag_string", tagString);
         compound.putBoolean("tag_mode", tagMode);
-        compound.put("filter_stack", filterStack.saveOptional(provider));
+        compound.put("filter_stack", ItemStack.OPTIONAL_CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), filterStack).getOrThrow());
         compound.putBoolean("fuzzy_match", fuzzyMatch);
         compound.putBoolean("match_count", matchCount);
         compound.putBoolean("filter_blocks", filterBlocks);
@@ -186,7 +187,7 @@ public class FilterItem extends FilterBase {
         whitelistMode = compound.getBooleanOr("whitelist_mode", false);
         tagString = compound.getStringOr("tag_string", "");
         tagMode = compound.getBooleanOr("tag_mode", false);
-        filterStack = ItemStack.parseOptional(provider, compound.getCompound("filter_stack"));
+        filterStack = ItemStack.OPTIONAL_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), compound.getCompoundOrEmpty("filter_stack")).result().orElse(ItemStack.EMPTY);
         fuzzyMatch = compound.getBooleanOr("fuzzy_match", false);
         matchCount = compound.getBooleanOr("match_count", false);
         filterBlocks = compound.getBooleanOr("filter_blocks", false);

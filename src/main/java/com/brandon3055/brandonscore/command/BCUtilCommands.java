@@ -42,6 +42,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
@@ -267,7 +268,7 @@ public class BCUtilCommands {
             throw new SimpleCommandExceptionType(Component.literal("You are not holding an item!")).create();
         }
 
-        Tag compound = stack.saveOptional(player.registryAccess());
+        Tag compound = ItemStack.OPTIONAL_CODEC.encodeStart(player.registryAccess().createSerializationContext(NbtOps.INSTANCE), stack).getOrThrow();
         LogHelperBC.logNBT((CompoundTag) compound);
         LogHelperBC.info(compound);
         StringBuilder builder = new StringBuilder();

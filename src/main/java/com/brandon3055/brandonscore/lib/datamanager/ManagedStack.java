@@ -4,6 +4,7 @@ import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
@@ -103,12 +104,12 @@ public class ManagedStack extends AbstractManagedData<ItemStack> {
 
     @Override
     public void toNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        compound.put(name, value.saveOptional(provider));
+        compound.put(name, ItemStack.OPTIONAL_CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), value).getOrThrow());
     }
 
     @Override
     public void fromNBT(HolderLookup.Provider provider, CompoundTag compound) {
-        value = ItemStack.parseOptional(provider, compound.getCompound(name));
+        value = ItemStack.OPTIONAL_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), compound.getCompoundOrEmpty(name)).result().orElse(ItemStack.EMPTY);
         notifyListeners(value);
     }
 
