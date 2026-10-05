@@ -220,7 +220,7 @@ public class BCoreNetwork {
     }
 
     public static void sentToAllExcept(PacketCustom packet, Player exclude) {
-        MinecraftServer server = exclude.getServer();
+        MinecraftServer server = exclude.level().getServer();
         if (server == null) return;
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (!player.getUUID().equals(exclude.getUUID())) {

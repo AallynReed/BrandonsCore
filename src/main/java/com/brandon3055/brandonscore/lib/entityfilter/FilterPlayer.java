@@ -72,7 +72,7 @@ public class FilterPlayer extends FilterBase {
         else if (!playerUUID.isEmpty()) {
             return player.getUUID().toString().equals(playerUUID);
         }
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server != null){
             GameProfile profile = server.getProfileCache().get(playerName).orElse(null);
             if (profile != null) {

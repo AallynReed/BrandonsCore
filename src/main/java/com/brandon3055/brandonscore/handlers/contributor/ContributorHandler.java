@@ -117,7 +117,7 @@ public class ContributorHandler {
         ContributorConfig newConfig = ContributorConfig.deSerialize(packet);
         getPropsCallback(sender, props -> {
             //Fixes some bugyness in the config gui when playing in single-player
-            if (sender.server.isDedicatedServer() || !sender.server.isSingleplayerOwner(sender.getGameProfile())) {
+            if (sender.level().getServer().isDedicatedServer() || !sender.level().getServer().isSingleplayerOwner(sender.nameAndId())) {
                 props.setConfig(newConfig);
 //                BrandonsCore.LOGGER.info("handleSettingsFromClient: Accepted Client Settings: " + sender);
             }
@@ -158,7 +158,7 @@ public class ContributorHandler {
 
     public static void handleClientLink(ServerPlayer sender) {
 //        BrandonsCore.LOGGER.info("handleClientLink: Client Link Received");
-        if (sender.server.isDedicatedServer() && !FETCHER.hasUser(sender.getUUID()) && System.currentTimeMillis() - lastClientReload > 60000) {
+        if (sender.level().getServer().isDedicatedServer() && !FETCHER.hasUser(sender.getUUID()) && System.currentTimeMillis() - lastClientReload > 60000) {
             reload();
             lastClientReload = System.currentTimeMillis();
 //            BrandonsCore.LOGGER.info("handleClientLink: Client Link Accepted!");
