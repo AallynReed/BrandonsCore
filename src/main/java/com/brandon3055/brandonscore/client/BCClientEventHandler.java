@@ -127,7 +127,7 @@ public class BCClientEventHandler {
         float newFOV = originalFOV;
 
         int slotIndex = 2;
-        for (ItemStack stack : player.getInventory().armor) {
+        for (ItemStack stack : new ItemStack[]{player.getItemBySlot(EquipmentSlot.FEET), player.getItemBySlot(EquipmentSlot.LEGS), player.getItemBySlot(EquipmentSlot.CHEST), player.getItemBySlot(EquipmentSlot.HEAD)}) {
             if (!stack.isEmpty() && stack.getItem() instanceof IFOVModifierItem) {
                 newFOV = ((IFOVModifierItem) stack.getItem()).getNewFOV(player, stack, newFOV, originalFOV, EquipmentSlot.values()[slotIndex]);
             }
