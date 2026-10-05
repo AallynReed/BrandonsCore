@@ -4,11 +4,11 @@ import codechicken.lib.gui.modular.elements.GuiElement;
 import codechicken.lib.gui.modular.elements.GuiRectangle;
 import codechicken.lib.gui.modular.elements.GuiText;
 import codechicken.lib.gui.modular.lib.Constraints;
-import codechicken.lib.gui.modular.lib.GuiRender;
 import codechicken.lib.gui.modular.lib.geometry.Align;
 import codechicken.lib.gui.modular.lib.geometry.Borders;
 import codechicken.lib.gui.modular.lib.geometry.ConstrainedGeometry;
 import codechicken.lib.gui.modular.lib.geometry.GuiParent;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -312,11 +312,11 @@ public class InfoPanel extends GuiElement<InfoPanel> {
     public static GuiRectangle background(InfoPanel panel, int background, int border) {
         return new GuiRectangle(panel) {
             @Override
-            public void renderBackground(GuiRender render, double mouseX, double mouseY, float partialTicks) {
+            public void renderBehind(GuiGraphicsExtractor render, double mouseX, double mouseY, float partialTicks) {
                 int bgColour = background | (int) (0xf0 * panel.getFadeAlpha()) << 24;
                 int borderColour = border | (int) (0xB0 * panel.getFadeAlpha()) << 24;
                 int borderColourEnd = (borderColour & 0xFEFEFE) >> 1 | borderColour & 0xFF000000;
-                render.toolTipBackground(xMin(), yMin(), xSize(), ySize(), bgColour, borderColour, borderColourEnd);
+                render.cc$tooltipBackground(xMin(), yMin(), xSize(), ySize(), bgColour, bgColour, borderColour, borderColourEnd, false);
             }
         };
     }

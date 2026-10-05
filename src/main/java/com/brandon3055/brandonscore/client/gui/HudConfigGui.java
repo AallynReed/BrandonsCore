@@ -12,11 +12,14 @@ import com.brandon3055.brandonscore.client.hud.HudData;
 import com.brandon3055.brandonscore.client.hud.HudManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
+import org.joml.Matrix3x2f;
 
 import java.awt.*;
 
@@ -87,14 +90,14 @@ public class HudConfigGui implements GuiProvider {
         }
 
         @Override
-        public void renderBackground(GuiRender render, double mouseX, double mouseY, float partialTicks) {
+        public void renderBehind(GuiGraphicsExtractor render, double mouseX, double mouseY, float partialTicks) {
             int rgb = Color.HSBtoRGB((tick + partialTicks) / 200F, 1F, 1F);
             drawBackground(render, xMin(), yMin(), xSize(), ySize(), partialTicks, rgb);
 
             if (bgAnim > 0) {
                 Component name = Component.translatable(String.format("hud.%s.%s.name", HudManager.HUD_REGISTRY.getKey(element).getNamespace(), HudManager.HUD_REGISTRY.getKey(element).getPath()));
                 float bgAnim = Math.min(this.bgAnim + (partialTicks * 0.1F), 1);
-                render.drawCenteredString(name, (float) xCenter(), (float) yCenter() - 2F, (0x00FFFFFF | ((int) (0xFF * bgAnim) << 24)), false);
+                render.cc$drawCenteredString(font(), name, (float) xCenter(), (float) yCenter() - 2F, (0x00FFFFFF | ((int) (0xFF * bgAnim) << 24)), false);
             }
         }
 
@@ -142,53 +145,50 @@ public class HudConfigGui implements GuiProvider {
             return super.mouseReleased(event);
         }
 
-        private void drawBackground(GuiRender render, double x, double y, double w, double h, float partialTicks, int colour) {
+        private void drawBackground(GuiGraphicsExtractor render, double x, double y, double w, double h, float partialTicks, int colour) {
             float borderAnim = this.borderAnim + (partialTicks * 0.1F);
             float bgAnim = Math.min(this.bgAnim + (partialTicks * 0.1F), 1);
-            render.rect(getRectangle(), ((int) (0x8F * bgAnim) << 24));
+            render.cc$fill(getRectangle(), ((int) (0x8F * bgAnim) << 24));
 
-            VertexConsumer buffer = render.buffers().getBuffer(GuiRender.SOLID);
-            Matrix4f mat = render.pose().last().pose();
+            render.cc$submitCustom(RenderPipelines.GUI, TextureSetup.noTexture(), x, x + w, y, y + h, (buffer, mat) -> {
+                double boarderLength = w * 2 + h * 2;
+                double bp = boarderLength * borderAnim;
+                if (bp > 0) {
+                    double sw = Math.min(w, bp);
+                    //Top Boarder
+                    drawGradientQuad(buffer, mat, x, y, x + sw, y, x + sw - 1, y + 1, x + 1, y + 1, 0xFF000000, colour);
+                    drawGradientQuad(buffer, mat, x + 1, y + 1, x + sw - 1, y + 1, x + sw - 2, y + 2, x + 2, y + 2, colour, 0xFF000000);
+                }
 
-            double boarderLength = w * 2 + h * 2;
-            double bp = boarderLength * borderAnim;
-            if (bp > 0) {
-                double sw = Math.min(w, bp);
-                //Top Boarder
-                drawGradientQuad(buffer, mat, x, y, x + sw, y, x + sw - 1, y + 1, x + 1, y + 1, 0xFF000000, colour);
-                drawGradientQuad(buffer, mat, x + 1, y + 1, x + sw - 1, y + 1, x + sw - 2, y + 2, x + 2, y + 2, colour, 0xFF000000);
-            }
+                if (bp - w > 0) {
+                    double sh = Math.min(h, bp - w);
+                    double p = sh / h;
+                    //Right Boarder
+                    drawGradientQuad(buffer, mat, x + w, y, x + w, y + sh, x + w - 1, y + sh - 1 * p, x + w - 1, y + 1, 0xFF000000, colour);
+                    drawGradientQuad(buffer, mat, x + w - 1, y + 1, x + w - 1, y + sh - 1, x + w - 2, y + sh - 2 * p, x + w - 2, y + 2, colour, 0xFF000000);
+                }
 
-            if (bp - w > 0) {
-                double sh = Math.min(h, bp - w);
-                double p = sh / h;
-                //Right Boarder
-                drawGradientQuad(buffer, mat, x + w, y, x + w, y + sh, x + w - 1, y + sh - 1 * p, x + w - 1, y + 1, 0xFF000000, colour);
-                drawGradientQuad(buffer, mat, x + w - 1, y + 1, x + w - 1, y + sh - 1, x + w - 2, y + sh - 2 * p, x + w - 2, y + 2, colour, 0xFF000000);
-            }
+                if (bp - w - h > 0) {
+                    double sw = Math.min(w, bp - w - h);
+                    double sx = x + w - sw;
+                    double p = sw / w;
+                    //Bottom Boarder
+                    drawGradientQuad(buffer, mat, sx + 2 * p, y + h - 2, sx + sw - 2, y + h - 2, sx + sw - 1, y + h - 1, sx + 1, y + h - 1, 0xFF000000, colour);
+                    drawGradientQuad(buffer, mat, sx + 1 * p, y + h - 1, sx + sw - 1, y + h - 1, sx + sw, y + h, sx, y + h, colour, 0xFF000000);
+                }
 
-            if (bp - w - h > 0) {
-                double sw = Math.min(w, bp - w - h);
-                double sx = x + w - sw;
-                double p = sw / w;
-                //Bottom Boarder
-                drawGradientQuad(buffer, mat, sx + 2 * p, y + h - 2, sx + sw - 2, y + h - 2, sx + sw - 1, y + h - 1, sx + 1, y + h - 1, 0xFF000000, colour);
-                drawGradientQuad(buffer, mat, sx + 1 * p, y + h - 1, sx + sw - 1, y + h - 1, sx + sw, y + h, sx, y + h, colour, 0xFF000000);
-            }
-
-            if (bp - w - h - w > 0) {
-                double sh = Math.min(h, bp - w - h - w);
-                double sy = y + h - sh;
-                double p = sh / h;
-                //Left Boarder
-                drawGradientQuad(buffer, mat, x + 1, sy + 1 * p, x + 1, sy + sh - 1, x, sy + sh, x, sy, colour, 0xFF000000);
-                drawGradientQuad(buffer, mat, x + 2, sy + 2 * p, x + 2, sy + sh - 2, x + 1, sy + sh - 1, x + 1, sy + 1 * p, 0xFF000000, colour);
-            }
-
-            render.flush();
+                if (bp - w - h - w > 0) {
+                    double sh = Math.min(h, bp - w - h - w);
+                    double sy = y + h - sh;
+                    double p = sh / h;
+                    //Left Boarder
+                    drawGradientQuad(buffer, mat, x + 1, sy + 1 * p, x + 1, sy + sh - 1, x, sy + sh, x, sy, colour, 0xFF000000);
+                    drawGradientQuad(buffer, mat, x + 2, sy + 2 * p, x + 2, sy + sh - 2, x + 1, sy + sh - 1, x + 1, sy + 1 * p, 0xFF000000, colour);
+                }
+            });
         }
 
-        private void drawGradientQuad(VertexConsumer buffer, Matrix4f mat, double p1A, double p1B, double p2A, double p2B, double p3A, double p3B, double p4A, double p4B, int startColor, int endColor) {
+        private void drawGradientQuad(VertexConsumer buffer, Matrix3x2f mat, double p1A, double p1B, double p2A, double p2B, double p3A, double p3B, double p4A, double p4B, int startColor, int endColor) {
             if (startColor == endColor && endColor == 0) return;
             //@formatter:off
             float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
@@ -200,10 +200,10 @@ public class HudConfigGui implements GuiProvider {
             float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
             float endBlue    = (float)(endColor         & 255) / 255.0F;
 
-            buffer.addVertex(mat, (float) p4A, (float) p4B, 0).setColor(  endRed,   endGreen,   endBlue,   endAlpha);
-            buffer.addVertex(mat, (float) p3A, (float) p3B, 0).setColor(  endRed,   endGreen,   endBlue,   endAlpha);
-            buffer.addVertex(mat, (float) p2A, (float) p2B, 0).setColor(startRed, startGreen, startBlue, startAlpha);
-            buffer.addVertex(mat, (float) p1A, (float) p1B, 0).setColor(startRed, startGreen, startBlue, startAlpha);
+            buffer.addVertexWith2DPose(mat, (float) p4A, (float) p4B).setColor(  endRed,   endGreen,   endBlue,   endAlpha);
+            buffer.addVertexWith2DPose(mat, (float) p3A, (float) p3B).setColor(  endRed,   endGreen,   endBlue,   endAlpha);
+            buffer.addVertexWith2DPose(mat, (float) p2A, (float) p2B).setColor(startRed, startGreen, startBlue, startAlpha);
+            buffer.addVertexWith2DPose(mat, (float) p1A, (float) p1B).setColor(startRed, startGreen, startBlue, startAlpha);
             //@formatter:on
         }
     }
