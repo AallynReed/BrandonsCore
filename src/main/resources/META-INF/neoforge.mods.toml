@@ -3,6 +3,9 @@ loaderVersion="[2,)"
 issueTrackerURL="https://github.com/Draconic-Inc/BrandonsCore"
 license="CoFH \"Don't Be a Jerk\" License"
 
+[[mixins]]
+config="mixins.brandonscore.json"
+
 [[mods]]
 	modId="brandonscore"
 	displayName="Brandon's Core"
