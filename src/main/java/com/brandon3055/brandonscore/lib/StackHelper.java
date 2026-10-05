@@ -3,6 +3,7 @@ package com.brandon3055.brandonscore.lib;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DynamicOps;
+import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
@@ -114,7 +115,7 @@ public class StackHelper {
         }
 
         try {
-            ItemParser.ItemResult result = parser.parse(new StringReader(stackString));
+            ItemInput result = parser.parse(new StringReader(stackString));
             ItemStack stack = new ItemStack(result.item(), count);
             if (count > stack.getMaxStackSize()) {
                 stack.setCount(stack.getMaxStackSize());
