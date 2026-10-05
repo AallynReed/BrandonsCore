@@ -18,6 +18,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -53,9 +55,9 @@ public class EnergyUtils {
         if (opStorage != null) {
             return opStorage;
         }
-        IEnergyStorage energyStorage = Capabilities.EnergyStorage.ITEM.getCapability(stack, null);
+        EnergyHandler energyStorage = Capabilities.Energy.ITEM.getCapability(stack, ItemAccess.forStack(stack));
         if (energyStorage != null) {
-            return new OPWrappers.FE(energyStorage);
+            return new OPWrappers.FE(IEnergyStorage.of(energyStorage));
         }
         return null;
     }
@@ -65,9 +67,9 @@ public class EnergyUtils {
         if (opStorage != null) {
             return opStorage;
         }
-        IEnergyStorage energyStorage = Capabilities.EnergyStorage.BLOCK.getCapability(level, pos, state, blockEntity, direction);
+        EnergyHandler energyStorage = Capabilities.Energy.BLOCK.getCapability(level, pos, state, blockEntity, direction);
         if (energyStorage != null) {
-            return new OPWrappers.FE(energyStorage);
+            return new OPWrappers.FE(IEnergyStorage.of(energyStorage));
         }
         return null;
     }

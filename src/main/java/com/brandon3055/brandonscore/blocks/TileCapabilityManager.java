@@ -2,7 +2,9 @@ package com.brandon3055.brandonscore.blocks;
 
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.packet.PacketCustom;
+import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
+import com.brandon3055.brandonscore.capability.OPWrappers;
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
 import com.brandon3055.brandonscore.lib.INBTSerializable;
 import com.brandon3055.brandonscore.network.BCoreNetwork;
@@ -145,8 +147,9 @@ public class TileCapabilityManager {
     @Nullable
     public <T> T getCapability(@Nonnull BlockCapability<T, Direction> cap, @Nullable Direction side) {
         Map<Direction, Object> map = capabilityMap.get(cap);
-        if (map == null && cap == Capabilities.EnergyStorage.BLOCK) {
-            map = capabilityMap.get(CapabilityOP.BLOCK);
+        if (map == null && cap == Capabilities.Energy.BLOCK) {
+            IOPStorage storage = getCapability(CapabilityOP.BLOCK, side);
+            return storage == null ? null : (T) new OPWrappers.EnergyHandlerWrapper(storage);
         }
 
         if (map != null && map.containsKey(side)) {

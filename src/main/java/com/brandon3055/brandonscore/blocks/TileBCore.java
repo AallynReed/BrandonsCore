@@ -103,7 +103,7 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
 
     protected static <BE extends TileBCore> void energyCapability(RegisterCapabilitiesEvent event, Supplier<BlockEntityType<BE>> type) {
         event.registerBlockEntity(CapabilityOP.BLOCK, type.get(), (tile, side) -> tile.getCapManager().getCapability(CapabilityOP.BLOCK, side));
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type.get(), (tile, side) -> tile.getCapManager().getCapability(CapabilityOP.BLOCK, side));
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, type.get(), (tile, side) -> tile.getCapManager().getCapability(Capabilities.Energy.BLOCK, side));
     }
 
     /**
