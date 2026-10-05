@@ -1,11 +1,11 @@
 package com.brandon3055.brandonscore.client.shader;
 
 import codechicken.lib.math.MathHelper;
-import codechicken.lib.render.shader.CCShaderInstance;
 import codechicken.lib.util.ClientUtils;
 import com.brandon3055.brandonscore.BrandonsCore;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -17,7 +17,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 /**
  * Created by brandon3055 on 15/05/2022
@@ -77,7 +76,14 @@ public class BCShaders {
             .withVertexFormat(ENERGY_BAR_FORMAT, VertexFormat.Mode.QUADS)
             .build();
 
-    public static CCShaderInstance posColourTexAlpha0;
+    public static final RenderPipeline.Snippet POS_COLOUR_TEX_ALPHA0 = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+            .withVertexShader(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "core/position_color_tex_alpha0"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "core/position_color_tex_alpha0"))
+            .withSampler("Sampler0")
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .buildSnippet();
 
     public static void init(IEventBus modBus) {
         LOCK.lock();
@@ -91,17 +97,10 @@ public class BCShaders {
         BADGE_FOIL_SHADER.register(modBus);
 
         modBus.addListener(BCShaders::onRegisterPipelines);
-        modBus.addListener(BCShaders::onRegisterShaders);
     }
 
     private static void onRegisterPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(ENERGY_BAR);
-    }
-
-    private static void onRegisterShaders(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), Identifier.fromNamespaceAndPath(BrandonsCore.MODID, "position_color_tex_alpha0"), DefaultVertexFormat.POSITION_TEX_COLOR), e -> {
-            posColourTexAlpha0 = (CCShaderInstance) e;
-        });
     }
 
 }
