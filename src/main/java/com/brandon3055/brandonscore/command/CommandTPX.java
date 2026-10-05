@@ -181,7 +181,7 @@ public class CommandTPX {
             float wrapPitch = Mth.wrapDegrees(pitch);
             wrapPitch = Mth.clamp(wrapPitch, -90.0F, 90.0F);
             if (worldIn == entityIn.level()) {
-                entityIn.moveTo(x, y, z, wrapYaw, wrapPitch);
+                entityIn.snapTo(x, y, z, wrapYaw, wrapPitch);
                 entityIn.setYHeadRot(wrapYaw);
             } else {
                 entityIn.unRide();
@@ -193,7 +193,7 @@ public class CommandTPX {
                 }
 
                 entityIn.restoreFrom(entity);
-                entityIn.moveTo(x, y, z, wrapYaw, wrapPitch);
+                entityIn.snapTo(x, y, z, wrapYaw, wrapPitch);
                 entityIn.setYHeadRot(wrapYaw);
                 worldIn.addDuringTeleport(entityIn);
             }

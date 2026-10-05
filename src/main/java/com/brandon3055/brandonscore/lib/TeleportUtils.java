@@ -106,7 +106,7 @@ public class TeleportUtils {
                 player.connection.teleport(xCoord, yCoord, zCoord, rotY, rotX);
                 player.setYHeadRot(rotY);
             } else {
-                entity.moveTo(xCoord, yCoord, zCoord, rotY, rotX);
+                entity.snapTo(xCoord, yCoord, zCoord, rotY, rotX);
                 entity.setYHeadRot(rotY);
             }
         }
@@ -131,7 +131,7 @@ public class TeleportUtils {
         movedEntity = entity.getType().create(targetWorld);
         if (movedEntity != null) {
             movedEntity.restoreFrom(entity);
-            movedEntity.moveTo(xCoord, yCoord, zCoord, rotY, rotX);
+            movedEntity.snapTo(xCoord, yCoord, zCoord, rotY, rotX);
             targetWorld.addDuringTeleport(movedEntity);
             entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
             ((ServerLevel) entity.level()).resetEmptyTime();
@@ -221,7 +221,7 @@ public class TeleportUtils {
                 return;
             }
             if (entity.isPassenger()) {
-                entity.moveTo(entity.getX() + offsetX, entity.getY() + offsetY, entity.getZ() + offsetZ, entity.getYRot(), entity.getXRot());
+                entity.snapTo(entity.getX() + offsetX, entity.getY() + offsetY, entity.getZ() + offsetZ, entity.getYRot(), entity.getXRot());
             }
             for (PassengerHelper passenger : passengers) {
                 DelayedTask.run(1, () -> passenger.entity.startRiding(entity, true));

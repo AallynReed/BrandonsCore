@@ -140,7 +140,7 @@ public class ClientPacketHandler implements ICustomPacketHandler.IClientPacketHa
 
         entity.setDeltaMovement(velocity);
         entity.syncPacketPositionCodec(posX, posY, posZ);
-        entity.moveTo(posX, posY, posZ);
+        entity.snapTo(posX, posY, posZ);
         entity.setXRot(xRot);
         entity.setYRot(yRot);
         entity.setId(entityID);
