@@ -1,5 +1,6 @@
 package com.brandon3055.brandonscore.client.shader;
 
+import codechicken.lib.vec.Matrix4;
 import org.joml.Matrix4fc;
 
 import java.nio.ByteBuffer;
@@ -39,6 +40,8 @@ public class BCUniform {
     public void glUniform4f(float f0, float f1, float f2, float f3) { glUniformF(f0, f1, f2, f3); }
 
     public void glUniform1b(boolean b0) { glUniformI(b0 ? 1 : 0); }
+
+    public void glUniformMatrix4f(Matrix4 matrix) { glUniformF(matrix.toArrayF()); }
 
     public void glUniformMatrix4f(Matrix4fc matrix) { glUniformF(matrix.get(new float[16])); }
 
