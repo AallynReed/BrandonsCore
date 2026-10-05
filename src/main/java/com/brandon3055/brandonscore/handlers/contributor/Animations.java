@@ -6,6 +6,7 @@ import com.brandon3055.brandonscore.client.ClientOnly;
 import com.brandon3055.brandonscore.handlers.contributor.ContributorConfig.WingBehavior;
 import com.brandon3055.brandonscore.utils.Utils;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -114,9 +115,9 @@ public class Animations {
         hideWings = false;
         float hideSpeed = 0.1F;
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        boolean hasElytra = chest.getItem().canElytraFly(chest, player);
+        boolean hasElytra = LivingEntity.canGlideUsing(chest, EquipmentSlot.CHEST);
         if (!hasElytra && BrandonsCore.equipmentManager != null) {
-            hasElytra = !BrandonsCore.equipmentManager.findMatchingItem(e -> e.getItem().canElytraFly(e, player), player).isEmpty();
+            hasElytra = !BrandonsCore.equipmentManager.findMatchingItem(e -> LivingEntity.canGlideUsing(e, EquipmentSlot.CHEST), player).isEmpty();
         }
 
         if (config.getWingsTier() == null || (hasElytra && config.getWingsElytra() == ContributorConfig.WingElytraCompat.HIDE_WINGS)) {
