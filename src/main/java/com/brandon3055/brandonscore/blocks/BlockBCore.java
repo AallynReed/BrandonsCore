@@ -33,7 +33,7 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -326,7 +326,7 @@ public class BlockBCore extends Block implements IBCoreBlock {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean renderSelectionBox(RenderHighlightEvent.Block event, Level level) {
+    public boolean renderSelectionBox(ExtractBlockOutlineRenderStateEvent event, Level level) {
         return true;
     }
 }

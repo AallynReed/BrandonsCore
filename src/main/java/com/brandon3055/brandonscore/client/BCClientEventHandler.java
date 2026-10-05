@@ -109,10 +109,10 @@ public class BCClientEventHandler {
     }
 
     @SubscribeEvent
-    public void drawSelectionEvent(RenderHighlightEvent.Block event) {
+    public void drawSelectionEvent(ExtractBlockOutlineRenderStateEvent event) {
         Level level = Minecraft.getInstance().level;
-        if (event.getTarget().getType() == HitResult.Type.MISS || level == null) return;
-        BlockState state = level.getBlockState(event.getTarget().getBlockPos());
+        if (event.getHitResult().getType() == HitResult.Type.MISS || level == null) return;
+        BlockState state = level.getBlockState(event.getHitResult().getBlockPos());
         if (state.getBlock() instanceof BlockBCore block) {
             if (!block.renderSelectionBox(event, level)) {
                 event.setCanceled(true);
