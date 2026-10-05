@@ -39,7 +39,7 @@ runs {
         workingDirectory file('run')
 //         mods { brandonscore { source sourceSets.main } }
     }
-    data {
+    clientData {
         workingDirectory file('run')
 //        programArguments.addAll '--mod', 'brandonscore', '--all', '--output', file("src/main/generated"), '--existing', file("src/main/resources")
         arguments.addAll '--mod', 'brandonscore', '--all', '--output', file("src/main/generated").absolutePath, '--existing', file("src/main/resources").absolutePath
