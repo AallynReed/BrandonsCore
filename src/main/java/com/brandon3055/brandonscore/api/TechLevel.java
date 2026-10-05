@@ -10,7 +10,7 @@ import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 
 import java.util.Locale;
 import java.util.function.IntFunction;
@@ -62,7 +62,7 @@ public enum TechLevel implements StringRepresentable {
     private final ChatFormatting textColour;
     private Rarity rarity;
     private final int harvestLevel;
-    private Tier itemTier;
+    private ToolMaterial itemTier;
     public static final TechLevel[] VALUES = new TechLevel[4];
     public static final TechLevel[] TOOL_LEVELS = new TechLevel[3];
 
