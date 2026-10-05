@@ -194,7 +194,7 @@ public class TileCapabilityManager {
         for (SerializationFlags<?> helper : serializableMap.values()) {
             helper.lazyLoadDefault(provider);
             if (compound.contains(helper.tagName)) {
-                helper.getData().deserializeNBT(provider, compound.getCompound(helper.tagName));
+                helper.getData().deserializeNBT(provider, compound.getCompoundOrEmpty(helper.tagName));
             }
         }
     }

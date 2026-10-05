@@ -86,7 +86,7 @@ public class ManagedNBTSerializableMap extends AbstractManagedData {
         CompoundTag tags = compound.getCompoundOrEmpty(name);
         for (String name : new ArrayList<>(valueMap.keySet())) {
             if (tags.contains(name)) {
-                valueMap.get(name).deserializeNBT(registryAccess, tags.getCompound(name));
+                valueMap.get(name).deserializeNBT(registryAccess, tags.getCompoundOrEmpty(name));
             }
         }
         lastValueMap.clear();

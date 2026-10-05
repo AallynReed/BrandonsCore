@@ -54,6 +54,6 @@ public class MultiCapabilityProvider implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        nameMap.forEach((s, t) -> t.deserializeNBT(provider, nbt.getCompound(s)));
+        nameMap.forEach((s, t) -> t.deserializeNBT(provider, nbt.getCompoundOrEmpty(s)));
     }
 }
