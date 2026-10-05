@@ -44,8 +44,8 @@ public class HudConfigGui implements GuiProvider {
         }
 
         gui.onClose(HudData::saveIfDirty);
-        gui.onKeyPressPost((key, scancode, modifiers) -> {
-            InputConstants.Key input = InputConstants.getKey(key, scancode);
+        gui.onKeyPressPost(event -> {
+            InputConstants.Key input = InputConstants.getKey(event);
             if (gui.mc().options.keyInventory.isActiveAndMatches(input)) {
                 gui.getScreen().onClose();
             }

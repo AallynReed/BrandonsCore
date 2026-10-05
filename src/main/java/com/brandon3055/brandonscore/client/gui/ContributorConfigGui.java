@@ -15,6 +15,7 @@ import com.brandon3055.brandonscore.handlers.contributor.ContributorConfig.WingB
 import com.brandon3055.brandonscore.handlers.contributor.ContributorConfig.WingElytraCompat;
 import com.brandon3055.brandonscore.handlers.contributor.ContributorProperties;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -225,14 +226,14 @@ public class ContributorConfigGui implements GuiProvider {
 
     double lastMouseX = 0;
 
-    public void mouseClicked(double mouseX, double mouseY, int button) {
+    public void mouseClicked(MouseButtonEvent event) {
         if (!playerRender.isMouseOver()) {
             dragging = true;
-            lastMouseX = mouseX;
+            lastMouseX = event.x();
         }
     }
 
-    public void mouseReleased(double mouseX, double mouseY, int button) {
+    public void mouseReleased(MouseButtonEvent event) {
         dragging = false;
     }
 
