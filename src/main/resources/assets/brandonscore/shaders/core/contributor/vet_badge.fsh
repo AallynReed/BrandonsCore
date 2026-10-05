@@ -1,20 +1,16 @@
 #version 150
 
 #moj_import <fog.glsl>
+#moj_import <dynamictransforms.glsl>
 #moj_import <brandonscore:math.glsl>
+#moj_import <brandonscore:contrib_uniforms.glsl>
 
 uniform sampler2D Sampler0;
-uniform vec4 ColorModulator;
-uniform float FogStart;
-uniform float FogEnd;
-uniform vec4 FogColor;
-uniform vec4 BaseColor;
-uniform float Time;
-uniform float Decay;
 
 in vec3 fPos;
 in vec3 vPos;
-in float vertexDistance;
+in float sphericalVertexDistance;
+in float cylindricalVertexDistance;
 in vec4 vertexColor;
 in vec4 lightMapColor;
 in vec4 overlayColor;
@@ -40,7 +36,7 @@ void main() {
             texCol *= vertexColor * ColorModulator;
             texCol.rgb = mix(overlayColor.rgb, texCol.rgb, overlayColor.a);
             texCol *= lightMapColor;
-            fragColor = linear_fog(texCol, vertexDistance, FogStart, FogEnd, FogColor);
+            fragColor = apply_fog(texCol, sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd, FogColor);
             return;
         }
     } else if(texCol.a < 0.6) {
@@ -91,5 +87,5 @@ void main() {
     color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
     color *= lightMapColor;
 
-    fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
+    fragColor = apply_fog(color, sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd, FogColor);
 }

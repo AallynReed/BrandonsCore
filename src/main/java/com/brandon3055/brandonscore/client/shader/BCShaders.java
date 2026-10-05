@@ -20,7 +20,8 @@ import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 public class BCShaders {
     private static final CrashLock LOCK = new CrashLock("Already Initialized");
 
-    public static final ChaosEntityShader CHAOS_ENTITY_SHADER = new ChaosEntityShader("chaos_entity", DefaultVertexFormat.NEW_ENTITY)
+    public static final ChaosEntityShader CHAOS_ENTITY_SHADER = new ChaosEntityShader("chaos_entity", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> {
                 Player player = Minecraft.getInstance().player;
                 e.getTimeUniform().glUniform1f((float) ClientUtils.getRenderTime());
@@ -28,20 +29,33 @@ public class BCShaders {
                 e.getPitchUniform().glUniform1f((float) -(player.getXRot() * MathHelper.torad));
             });
 
-    public static final ContribShader CONTRIB_BASE_SHADER = new ContribShader("contributor/contrib_base", DefaultVertexFormat.NEW_ENTITY);
-    public static final ContribShader WINGS_WEB_SHADER = new ContribShader("contributor/wings_web", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader CONTRIB_BASE_SHADER = new ContribShader("contributor/contrib_base", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
+            .withDefaults(e -> {
+                e.getDisableLightUniform().glUniform1b(false);
+                e.getDisableOverlayUniform().glUniform1b(false);
+                e.getUv1OverrideUniform().glUniform2i(0, 0);
+                e.getUv2OverrideUniform().glUniform2i(0, 0);
+            });
+    public static final ContribShader WINGS_WEB_SHADER = new ContribShader("contributor/wings_web", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 20)));
-    public static final ContribShader WINGS_BONE_SHADER = new ContribShader("contributor/wings_bone", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader WINGS_BONE_SHADER = new ContribShader("contributor/wings_bone", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 20)));
 
-    public static final ContribShader VET_BADGE_SHADER = new ContribShader("contributor/vet_badge", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader VET_BADGE_SHADER = new ContribShader("contributor/vet_badge", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 20)));
 
-    public static final ContribShader BADGE_OUTLINE_SHADER = new ContribShader("contributor/badge_outline", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader BADGE_OUTLINE_SHADER = new ContribShader("contributor/badge_outline", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 20)));
-    public static final ContribShader BADGE_CORE_SHADER = new ContribShader("contributor/patreon_core", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader BADGE_CORE_SHADER = new ContribShader("contributor/patreon_core", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 20)));
-    public static final ContribShader BADGE_FOIL_SHADER = new ContribShader("contributor/badge_foil", DefaultVertexFormat.NEW_ENTITY)
+    public static final ContribShader BADGE_FOIL_SHADER = new ContribShader("contributor/badge_foil", DefaultVertexFormat.ENTITY)
+            .withSamplers("Sampler0", "Sampler1", "Sampler2")
             .onShaderApplied(e -> e.getTimeUniform().glUniform1f((float) (ClientUtils.getRenderTime() / 40)));
 
     public static CCShaderInstance energyBarShader;
