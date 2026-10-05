@@ -4,9 +4,8 @@ import com.brandon3055.brandonscore.CommonProxy;
 import com.brandon3055.brandonscore.handlers.IProcess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
-import net.minecraft.client.multiplayer.chat.GuiMessageTag;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.server.MinecraftServer;
@@ -60,7 +59,7 @@ public class ClientProxy extends CommonProxy {
         Minecraft mc = Minecraft.getInstance();
         deleteMessage(signature);
         if (message == null) return;
-        mc.gui.getChat().addMessage(message, signature, null);
+        mc.gui.getChat().addMessage(message, signature, GuiMessageSource.SYSTEM_SERVER, null);
     }
 
     public void deleteMessage(MessageSignature signature) {
@@ -74,17 +73,13 @@ public class ClientProxy extends CommonProxy {
         chat.trimmedMessages.clear();
         for (int i = chat.allMessages.size() - 1; i >= 0; --i) {
             GuiMessage guiMessage = chat.allMessages.get(i);
-            addMessageQuietly(chat, guiMessage.content(), guiMessage.signature(), guiMessage.addedTime(), guiMessage.tag(), true);
+            addMessageQuietly(chat, guiMessage, true);
         }
     }
 
-    private static void addMessageQuietly(ChatComponent chat, Component component, @Nullable MessageSignature messageSignature, int i, @Nullable GuiMessageTag guiMessageTag, boolean updateOnly) {
+    private static void addMessageQuietly(ChatComponent chat, GuiMessage guiMessage, boolean updateOnly) {
         int j = Mth.floor((double) chat.getWidth() / chat.getScale());
-        if (guiMessageTag != null && guiMessageTag.icon() != null) {
-            j -= guiMessageTag.icon().width + 4 + 2;
-        }
-
-        List<FormattedCharSequence> list = ComponentRenderUtils.wrapComponents(component, j, Minecraft.getInstance().font);
+        List<FormattedCharSequence> list = guiMessage.splitLines(Minecraft.getInstance().font, j);
         boolean bl2 = chat.isChatFocused();
 
         for (int k = 0; k < list.size(); ++k) {
@@ -95,7 +90,7 @@ public class ClientProxy extends CommonProxy {
             }
 
             boolean bl3 = k == list.size() - 1;
-            chat.trimmedMessages.add(0, new GuiMessage.Line(i, formattedCharSequence, guiMessageTag, bl3));
+            chat.trimmedMessages.add(0, new GuiMessage.Line(guiMessage, formattedCharSequence, bl3));
         }
 
         while (chat.trimmedMessages.size() > 100) {
@@ -103,7 +98,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         if (!updateOnly) {
-            chat.allMessages.add(0, new GuiMessage(i, component, messageSignature, guiMessageTag));
+            chat.allMessages.add(0, guiMessage);
 
             while (chat.allMessages.size() > 100) {
                 chat.allMessages.remove(chat.allMessages.size() - 1);
