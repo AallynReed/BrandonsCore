@@ -3,7 +3,7 @@ package com.brandon3055.brandonscore.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,18 +27,18 @@ public class ExtendedModelPart extends ModelPart {
     @Override
     public final void render(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay, int colour) {}
 
-    public final void render(PoseStack poseStack, MultiBufferSource getter, int packedLight, int packedOverlay) {
-        render(poseStack, getter, packedLight, packedOverlay, 1F, 1F, 1F, 1F);
+    public final void render(PoseStack poseStack, SubmitNodeCollector collector, int packedLight, int packedOverlay) {
+        render(poseStack, collector, packedLight, packedOverlay, 1F, 1F, 1F, 1F);
     }
 
-    public void render(PoseStack poseStack, MultiBufferSource getter, int packedLight, int packedOverlay, float r, float g, float b, float a) {
+    public void render(PoseStack poseStack, SubmitNodeCollector collector, int packedLight, int packedOverlay, float r, float g, float b, float a) {
         if (this.visible) {
             if (!this.children.isEmpty()) {
                 poseStack.pushPose();
                 this.translateAndRotate(poseStack);
 
                 for (ExtendedModelPart child : this.children) {
-                    child.render(poseStack, getter, packedLight, packedOverlay, r, g, b, a);
+                    child.render(poseStack, collector, packedLight, packedOverlay, r, g, b, a);
                 }
 
                 poseStack.popPose();
