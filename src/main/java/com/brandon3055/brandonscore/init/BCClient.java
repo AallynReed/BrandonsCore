@@ -1,6 +1,5 @@
 package com.brandon3055.brandonscore.init;
 
-import codechicken.lib.gui.modular.sprite.GuiTextures;
 import com.brandon3055.brandonscore.BrandonsCore;
 import com.brandon3055.brandonscore.client.*;
 import com.brandon3055.brandonscore.client.hud.HudManager;
