@@ -12,6 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -36,7 +37,7 @@ public class InventoryDynamic implements Container {
     ).apply(builder, InventoryDynamic::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, InventoryDynamic> STREAM_CODEC = BCStreamCodec.composite(
-            ItemStack.LIST_STREAM_CODEC, e -> e.stacks,
+            ItemStack.OPTIONAL_LIST_STREAM_CODEC, e -> e.stacks,
             ByteBufCodecs.INT, e -> e.xp,
             InventoryDynamic::new
     );
@@ -129,12 +130,12 @@ public class InventoryDynamic implements Container {
     }
 
     @Override
-    public void startOpen(Player player) {
+    public void startOpen(ContainerUser player) {
 
     }
 
     @Override
-    public void stopOpen(Player player) {
+    public void stopOpen(ContainerUser player) {
 
     }
 
