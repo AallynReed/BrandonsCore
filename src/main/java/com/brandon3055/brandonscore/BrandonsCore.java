@@ -70,7 +70,7 @@ public class BrandonsCore {
         ContributorHandler.init();
         BCEventHandler.init();
         BCCommands.init();
-        SighEditHandler.init();
+        SighEditHandler.init(modBus);
         BCContent.init(modBus);
         Utils.unsafeRunWhenOn(Dist.CLIENT, () -> () -> BCClient.init(modBus));
     }
