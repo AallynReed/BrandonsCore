@@ -226,7 +226,7 @@ public class BCUtilCommands {
         return Commands.literal("player_access")
                 .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("target", reader -> StringArgumentType.string())
-                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(accessiblePlayers(context.getSource()).values().stream().map(GameProfile::getName), builder))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(accessiblePlayers(context.getSource()).values().stream().map(GameProfile::name), builder))
                         .executes(context -> playerAccess(context.getSource(), context.getArgument("target", String.class)))
                 )
                 .then(Commands.literal("list")
