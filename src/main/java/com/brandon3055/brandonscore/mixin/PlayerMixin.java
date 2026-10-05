@@ -3,7 +3,7 @@ package com.brandon3055.brandonscore.mixin;
 import com.brandon3055.brandonscore.BrandonsCore;
 import com.brandon3055.brandonscore.api.ElytraEnabledItem;
 import net.covers1624.quack.util.SneakyUtils;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
