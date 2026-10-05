@@ -38,7 +38,7 @@ public class CommandTPX {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 Commands.literal("tpx")
-                        .requires((p_198816_0_) -> p_198816_0_.hasPermission(2))
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("dimension", DimensionArgument.dimension())
                                 .executes(ctx -> teleportToPos(ctx.getSource(), Collections.singleton(ctx.getSource().getEntityOrException()), DimensionArgument.getDimension(ctx, "dimension"), null, null))
                                 .then(Commands.argument("location", Vec3Argument.vec3())

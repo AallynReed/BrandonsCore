@@ -57,7 +57,7 @@ public class BCClientCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> hudConfig() {
         return Commands.literal("hudconfig")
-                .requires(cs -> cs.hasPermission(0))
+                .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                 .executes(context -> {
                     DelayedTask.client(10, () -> Minecraft.getInstance().setScreen(new HudConfigGui.Screen()));
                     return 0;
@@ -66,7 +66,7 @@ public class BCClientCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> contributor() {
         return Commands.literal("contributor")
-                .requires(cs -> cs.hasPermission(0))
+                .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                 .executes(context -> {
                     Player player = ClientOnly.getClientPlayer();
                     ContributorProperties props = ContributorHandler.getProps(player);

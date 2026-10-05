@@ -122,7 +122,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerTileDebug() {
         return Commands.literal("debug_tile")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("pos", BlockPosArgument.blockPos())
                         .executes(context -> {
                             BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
@@ -144,7 +144,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> reloadContributors() {
         return Commands.literal("reset_contrib_handler")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .executes(context -> {
                     ContributorHandler.reload();
                     context.getSource().sendSuccess(() -> Component.literal("Reset complete"), false);
@@ -154,7 +154,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerPlaceMultiBlock() {
         return Commands.literal("place_multiblock")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("pos", BlockPosArgument.blockPos())
                         .then(Commands.argument("multiblock", IdentifierArgument.id())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(MultiBlockManager.getRegisteredIds(), builder))
@@ -169,21 +169,21 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerNBT() {
         return Commands.literal("nbt")
-                .requires(cs -> cs.hasPermission(0))
+                .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                 .executes(context -> functionNBT(context.getSource()));
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerStackString() {
         return Commands.literal("stack_string")
                 .then(Commands.literal("from_string")
-                        .requires(cs -> cs.hasPermission(2))
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("give-to", EntityArgument.player())
                                 .then(Commands.argument("stack-string", StringArgumentType.greedyString())
                                         .executes(ctx -> functionFromStackString(ctx.getSource(), EntityArgument.getPlayer(ctx, "give-to"), StringArgumentType.getString(ctx, "stack-string")))
                                 )))
 
                 .then(Commands.literal("to_string")
-                        .requires(cs -> cs.hasPermission(0))
+                        .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                         .then(Commands.literal("id_only")
                                 .executes(context -> functionToStackString(context.getSource(), false, false, false)))
                         .then(Commands.literal("id_nbt")
@@ -200,7 +200,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerRegenChunk() {
         return Commands.literal("regenchunk")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("radius", IntegerArgumentType.integer(1, 32))
                         .executes(ctx -> regenChunk(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))
                 );
@@ -208,13 +208,13 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerNoClip() {
         return Commands.literal("noclip")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .executes(context -> toggleNoClip(context.getSource()));
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerUUID() {
         return Commands.literal("uuid")
-                .requires(cs -> cs.hasPermission(0))
+                .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                 .then(Commands.argument("target", EntityArgument.player())
                         .executes(ctx -> getUUID(ctx.getSource(), EntityArgument.getPlayer(ctx, "target")))
                 )
@@ -223,7 +223,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerPlayerAccess() {
         return Commands.literal("player_access")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("target", reader -> StringArgumentType.string())
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(accessiblePlayers(context.getSource()).values().stream().map(GameProfile::getName), builder))
                         .executes(context -> playerAccess(context.getSource(), context.getArgument("target", String.class)))
@@ -235,13 +235,13 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerDumpEvents() {
         return Commands.literal("dump_event_listeners")
-                .requires(cs -> cs.hasPermission(0))
+                .requires(Commands.hasPermission(Commands.LEVEL_ALL))
                 .executes(ctx -> dumpEventListeners(ctx.getSource()));
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerEggify() {
         return Commands.literal("eggify")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .then(Commands.argument("target", EntityArgument.entities())
                         .executes(ctx -> eggify(ctx, EntityArgument.getEntity(ctx, "target"))));
     }
@@ -775,7 +775,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerDev1() {
         return Commands.literal("dev1")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .executes(ctx -> {
                     ServerLevel level = ctx.getSource().getLevel();
                     ServerPlayer player = ctx.getSource().getPlayerOrException();
@@ -797,7 +797,7 @@ public class BCUtilCommands {
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerDev2() {
         return Commands.literal("dev2")
-                .requires(cs -> cs.hasPermission(3))
+                .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
                 .executes(ctx -> {
                     ServerLevel level = ctx.getSource().getLevel();
                     ServerPlayer player = ctx.getSource().getPlayerOrException();
