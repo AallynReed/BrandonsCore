@@ -1,9 +1,9 @@
 package com.brandon3055.brandonscore.api.hud;
 
+import codechicken.lib.gui.modular.lib.GuiRender;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -28,15 +28,15 @@ public interface IHudDisplay {
         return (displayList.size() * 10) + 6;
     }
 
-    default void renderHudBackground(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
-        render.cc$tooltipBackground(0, 0, width, height, 0xF0100010, 0xF0100010, 0x505000FF, 0x5028007f, false);
+    default void renderHudBackground(GuiRender render, double width, double height, List<Component> displayList) {
+        render.toolTipBackground(0, 0, width, height);
     }
 
-    default void renderHudContent(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
-        render.pose().translate(4, 4);
+    default void renderHudContent(GuiRender render, double width, double height, List<Component> displayList) {
+        render.pose().translate(4, 4, 0);
         for (Component text : displayList) {
-            render.cc$drawString(Minecraft.getInstance().font, text, 0, 0, 0xFFFFFF, true);
-            render.pose().translate(0, 10);
+            render.drawString(text, 0, 0, 0xFFFFFF, true);
+            render.pose().translate(0, 10, 0);
         }
     }
 }

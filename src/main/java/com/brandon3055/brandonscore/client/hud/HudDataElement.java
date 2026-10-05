@@ -1,5 +1,6 @@
 package com.brandon3055.brandonscore.client.hud;
 
+import codechicken.lib.gui.modular.lib.GuiRender;
 import com.brandon3055.brandonscore.api.hud.AbstractHudElement;
 import com.brandon3055.brandonscore.api.hud.IHudBlock;
 import com.brandon3055.brandonscore.api.hud.IHudDisplay;
@@ -7,7 +8,6 @@ import com.brandon3055.brandonscore.api.hud.IHudItem;
 import com.brandon3055.brandonscore.api.math.Vector2;
 import com.brandon3055.brandonscore.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -98,14 +98,16 @@ public class HudDataElement extends AbstractHudElement {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor render, float partialTicks, boolean configuring) {
+    public void render(GuiRender render, float partialTicks, boolean configuring) {
         if (!enabled || (activeHud == null && !configuring)) return;
-        render.pose().translate((float) xPos(), (float) yPos());
+        render.pose().translate(xPos(), yPos(), 0);
         if (activeHud == null) {
-            render.cc$tooltipBackground(0, 0, width(), height(), 0xF0100010, 0xF0100010, 0x505000FF, 0x5028007f, false);
+            render.toolTipBackground(0, 0, width(), height());
+            render.flush();
             return;
         }
         activeHud.renderHudBackground(render, width(), height(), displayList);
+        render.flush();
         activeHud.renderHudContent(render, width(), height(), displayList);
     }
 }

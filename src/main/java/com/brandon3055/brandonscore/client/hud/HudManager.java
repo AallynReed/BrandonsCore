@@ -1,12 +1,12 @@
 package com.brandon3055.brandonscore.client.hud;
 
+import codechicken.lib.gui.modular.lib.GuiRender;
 import com.brandon3055.brandonscore.api.hud.AbstractHudElement;
 import com.brandon3055.brandonscore.api.math.Vector2;
 import com.brandon3055.brandonscore.client.gui.HudConfigGui;
 import com.google.common.collect.ImmutableMap;
 import net.covers1624.quack.util.CrashLock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -19,9 +19,9 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 import static com.brandon3055.brandonscore.BrandonsCore.MODID;
 
@@ -50,27 +50,27 @@ public class HudManager {
         if (event.isCanceled()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) return;
-        GuiGraphicsExtractor render = event.getGuiGraphics();
+        GuiRender render = GuiRender.convert(event.getGuiGraphics());
         boolean configuring = mc.screen instanceof HudConfigGui.Screen;
         for (AbstractHudElement element : hudElements.values()) {
             if (element.shouldRender(true)) {
-                render.pose().pushMatrix();
+                render.pose().pushPose();
                 element.render(render, event.getPartialTick().getGameTimeDeltaPartialTick(false), configuring);
-                render.pose().popMatrix();
+                render.pose().popPose();
             }
         }
     }
 
     public static void onDrawOverlayPost(RenderGuiEvent.Post event) {
-        GuiGraphicsExtractor render = event.getGuiGraphics();
+        GuiRender render = GuiRender.convert(event.getGuiGraphics());
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) return;
         boolean configuring = mc.screen instanceof HudConfigGui.Screen;
         for (AbstractHudElement element : hudElements.values()) {
             if (element.shouldRender(false)) {
-                render.pose().pushMatrix();
+                render.pose().pushPose();
                 element.render(render, event.getPartialTick().getGameTimeDeltaPartialTick(false), configuring);
-                render.pose().popMatrix();
+                render.pose().popPose();
             }
         }
     }

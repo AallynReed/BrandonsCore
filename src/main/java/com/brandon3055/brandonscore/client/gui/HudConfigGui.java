@@ -90,14 +90,15 @@ public class HudConfigGui implements GuiProvider {
         }
 
         @Override
-        public void renderBehind(GuiGraphicsExtractor render, double mouseX, double mouseY, float partialTicks) {
+        public void renderBehind(GuiGraphicsExtractor graphics, double mouseX, double mouseY, float partialTicks) {
+            GuiRender render = GuiRender.convert(graphics);
             int rgb = Color.HSBtoRGB((tick + partialTicks) / 200F, 1F, 1F);
             drawBackground(render, xMin(), yMin(), xSize(), ySize(), partialTicks, rgb);
 
             if (bgAnim > 0) {
                 Component name = Component.translatable(String.format("hud.%s.%s.name", HudManager.HUD_REGISTRY.getKey(element).getNamespace(), HudManager.HUD_REGISTRY.getKey(element).getPath()));
                 float bgAnim = Math.min(this.bgAnim + (partialTicks * 0.1F), 1);
-                render.cc$drawCenteredString(font(), name, (float) xCenter(), (float) yCenter() - 2F, (0x00FFFFFF | ((int) (0xFF * bgAnim) << 24)), false);
+                render.drawCenteredString(name, (float) xCenter(), (float) yCenter() - 2F, (0x00FFFFFF | ((int) (0xFF * bgAnim) << 24)), false);
             }
         }
 
@@ -145,12 +146,12 @@ public class HudConfigGui implements GuiProvider {
             return super.mouseReleased(event);
         }
 
-        private void drawBackground(GuiGraphicsExtractor render, double x, double y, double w, double h, float partialTicks, int colour) {
+        private void drawBackground(GuiRender render, double x, double y, double w, double h, float partialTicks, int colour) {
             float borderAnim = this.borderAnim + (partialTicks * 0.1F);
             float bgAnim = Math.min(this.bgAnim + (partialTicks * 0.1F), 1);
-            render.cc$fill(getRectangle(), ((int) (0x8F * bgAnim) << 24));
+            render.rect(getRectangle(), ((int) (0x8F * bgAnim) << 24));
 
-            render.cc$submitCustom(RenderPipelines.GUI, TextureSetup.noTexture(), x, x + w, y, y + h, (buffer, mat) -> {
+            render.submitCustom(RenderPipelines.GUI, TextureSetup.noTexture(), x, x + w, y, y + h, (buffer, mat) -> {
                 double boarderLength = w * 2 + h * 2;
                 double bp = boarderLength * borderAnim;
                 if (bp > 0) {

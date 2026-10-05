@@ -1,29 +1,29 @@
 package com.brandon3055.brandonscore.client.gui;
 
 import codechicken.lib.gui.modular.ModularGui;
-import codechicken.lib.gui.modular.SpriteSupplier;
 import codechicken.lib.gui.modular.elements.*;
 import codechicken.lib.gui.modular.lib.Constraints;
+import codechicken.lib.gui.modular.lib.GuiRender;
 import codechicken.lib.gui.modular.lib.geometry.*;
+import codechicken.lib.gui.modular.sprite.Material;
 import com.brandon3055.brandonscore.BCConfig;
 import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.brandon3055.brandonscore.client.BCGuiTextures;
-import com.brandon3055.brandonscore.client.gui.modulargui.ShaderEnergyBar;
 import com.brandon3055.brandonscore.client.gui.modulargui.ShaderEnergyBar.EnergyBar;
+import com.brandon3055.brandonscore.client.gui.modulargui.ShaderEnergyBar;
 import com.brandon3055.brandonscore.lib.IRSSwitchable;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
-import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import java.util.function.IntSupplier;
 import static codechicken.lib.gui.modular.lib.geometry.Constraint.*;
 import static codechicken.lib.gui.modular.lib.geometry.GeoParam.*;
 import static com.brandon3055.brandonscore.BCConfig.darkMode;
@@ -78,11 +78,11 @@ public class GuiToolkit {
     //endregion
     //region ############ Button Helpers ############
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int size, SpriteSupplier iconSupplier) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int size, Supplier<Material> iconSupplier) {
         return createIconButton(parent, size, iconSupplier, false);
     }
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int size, SpriteSupplier iconSupplier, boolean transHighlight) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int size, Supplier<Material> iconSupplier, boolean transHighlight) {
         return createIconButton(parent, size, size, iconSupplier, transHighlight);
     }
 
@@ -94,11 +94,11 @@ public class GuiToolkit {
         return createIconButton(parent, buttonSize, iconSize, BCGuiTextures.getter(iconString), transHighlight);
     }
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonSize, int iconSize, SpriteSupplier iconSupplier) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonSize, int iconSize, Supplier<Material> iconSupplier) {
         return createIconButton(parent, buttonSize, iconSize, iconSupplier, false);
     }
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonSize, int iconSize, SpriteSupplier iconSupplier, boolean transHighlight) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonSize, int iconSize, Supplier<Material> iconSupplier, boolean transHighlight) {
         return createIconButton(parent, buttonSize, buttonSize, iconSize, iconSize, iconSupplier, transHighlight);
     }
 
@@ -110,11 +110,11 @@ public class GuiToolkit {
         return createIconButton(parent, buttonWidth, buttonHeight, iconWidth, iconHeight, BCGuiTextures.getter(iconString), transHighlight);
     }
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonWidth, int buttonHeight, int iconWidth, int iconHeight, SpriteSupplier iconSupplier) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonWidth, int buttonHeight, int iconWidth, int iconHeight, Supplier<Material> iconSupplier) {
         return createIconButton(parent, buttonWidth, buttonHeight, iconWidth, iconHeight, iconSupplier, false);
     }
 
-    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonWidth, int buttonHeight, int iconWidth, int iconHeight, SpriteSupplier iconSupplier, boolean transHighlight) {
+    public GuiButton createIconButton(@NotNull GuiParent<?> parent, int buttonWidth, int buttonHeight, int iconWidth, int iconHeight, Supplier<Material> iconSupplier, boolean transHighlight) {
         GuiButton button = new GuiButton(parent);
         Constraints.size(button, buttonWidth, buttonHeight);
         if (!transHighlight) addHoverHighlight(button, null, false);
@@ -133,11 +133,11 @@ public class GuiToolkit {
         return createIconButton(parent, size, BCGuiTextures.themedGetter(iconString));
     }
 
-    public GuiButton createThemedIconButton(@NotNull GuiParent<?> parent, SpriteSupplier texture) {
+    public GuiButton createThemedIconButton(@NotNull GuiParent<?> parent, Supplier<Material> texture) {
         return createThemedIconButton(parent, 12, texture);
     }
 
-    public GuiButton createThemedIconButton(@NotNull GuiParent<?> parent, int size, SpriteSupplier texture) {
+    public GuiButton createThemedIconButton(@NotNull GuiParent<?> parent, int size, Supplier<Material> texture) {
         return createIconButton(parent, size, texture);
     }
 
@@ -174,7 +174,7 @@ public class GuiToolkit {
         GuiButton button = new GuiButton(parent);
         Constraints.size(button, 12, 12);
         addHoverHighlight(button);
-        GuiTexture icon = new GuiTexture(button, () -> BCGuiTextures.get("redstone/" + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)).get());
+        GuiTexture icon = new GuiTexture(button, () -> BCGuiTextures.get("redstone/" + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
         Constraints.bind(icon, button);
         button.setTooltipSingle(() -> translateInternal("rs_mode." + switchable.getRSMode().name().toLowerCase(Locale.ENGLISH)));
         button.onPress(() -> switchable.setRSMode(switchable.getRSMode().next(Minecraft.getInstance().hasShiftDown())), GuiButton.LEFT_CLICK);
@@ -194,7 +194,7 @@ public class GuiToolkit {
         texture.setEnabled(() -> !button.isDisabled());
         texture.setShadeTopLeft(tlCol);
         texture.setShadeBottomRight(brCol);
-        texture.setShadeCorners(() -> ARGB.average(tlCol.getAsInt(), brCol.getAsInt()));
+        texture.setShadeCorners(() -> GuiRender.midColour(tlCol.getAsInt(), brCol.getAsInt()));
 
         GuiTexture disabledBG = new GuiTexture(button, BCGuiTextures.themedGetter("button_disabled"))
                 .setEnabled(button::isDisabled)
@@ -234,7 +234,7 @@ public class GuiToolkit {
 
     public GuiButton createBorderlessButton(@NotNull GuiParent<?> parent, @Nullable Supplier<Component> label) {
         GuiButton button = new GuiButton(parent);
-        GuiTexture texture = new GuiTexture(button, () -> BCGuiTextures.getThemed("button_borderless" + (button.isPressed() ? "_invert" : "")).get())
+        GuiTexture texture = new GuiTexture(button, () -> BCGuiTextures.getThemed("button_borderless" + (button.isPressed() ? "_invert" : "")))
                 .dynamicTexture();
         GuiRectangle highlight = new GuiRectangle(button).border(() -> button.hoverTime() > 0 ? 0xFFFFFFFF : 0);
         Constraints.bind(texture, button);
@@ -293,7 +293,7 @@ public class GuiToolkit {
         GuiRectangle container = new GuiRectangle(parent)
                 .setShadeTopLeft(dark)
                 .setShadeBottomRight(() -> 0xFFFFFFFF)
-                .setShadeCorners(() -> ARGB.average(0xFFFFFFFF, dark.getAsInt()));
+                .setShadeCorners(() -> GuiRender.midColour(0xFFFFFFFF, dark.getAsInt()));
         ShaderEnergyBar energyBar = new ShaderEnergyBar(container);
         energyBar.setToolTipFormatter(ShaderEnergyBar.opEnergyFormatter(storage));
         energyBar.bindOpStorage(storage);

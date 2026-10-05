@@ -1,11 +1,11 @@
 package com.brandon3055.brandonscore.client.render;
 
-import codechicken.lib.gui.modular.SpriteSupplier;
+import codechicken.lib.gui.modular.lib.GuiRender;
+import codechicken.lib.gui.modular.sprite.Material;
 import codechicken.lib.math.MathHelper;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -15,15 +15,10 @@ import net.minecraft.client.resources.metadata.animation.AnimationMetadataSectio
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.resources.Identifier;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by brandon3055 on 16/10/18.
  */
 public class RenderUtils {
-
-    private static final Map<Identifier, FullSprite> FULL_SPRITES = new HashMap<>();
 
 //    /**
 //     * * @return The buffer source used for GUI rendering. You must ALWAYS call endBatch on this when you are done with it.
@@ -45,13 +40,13 @@ public class RenderUtils {
         }
     }
 
-    public static void drawPieProgress(GuiGraphicsExtractor render, double x, double y, double diameter, double progress, double offsetAngle, int colour) {
+    public static void drawPieProgress(GuiRender render, double x, double y, double diameter, double progress, double offsetAngle, int colour) {
         drawPieProgress(render, x, y, diameter, progress, offsetAngle, colour, colour);
     }
 
-    public static void drawPieProgress(GuiGraphicsExtractor render, double x, double y, double diameter, double progress, double offsetAngle, int innerColour, int outerColour) {
+    public static void drawPieProgress(GuiRender render, double x, double y, double diameter, double progress, double offsetAngle, int innerColour, int outerColour) {
         float radius = (float) diameter / 2;
-        render.cc$submitCustom(RenderPipelines.GUI, TextureSetup.noTexture(), x, x + diameter, y, y + diameter, (builder, pose) -> {
+        render.submitCustom(RenderPipelines.GUI, TextureSetup.noTexture(), x, x + diameter, y, y + diameter, (builder, pose) -> {
             float lastX = 0;
             float lastY = 0;
             for (double d = 0; d <= 1; d += 1D / 30D) {
@@ -72,9 +67,8 @@ public class RenderUtils {
         });
     }
 
-    public static SpriteSupplier fromRawTexture(Identifier texture) {
-        FullSprite sprite = FULL_SPRITES.computeIfAbsent(texture, FullSprite::new);
-        return () -> sprite;
+    public static Material fromRawTexture(Identifier texture) {
+        return new Material(texture, texture, FullSprite::new);
     }
 
     public static float partialTick() {

@@ -4,6 +4,7 @@ import codechicken.lib.gui.modular.ModularGuiContainer;
 import codechicken.lib.gui.modular.elements.*;
 import codechicken.lib.gui.modular.lib.BackgroundRender;
 import codechicken.lib.gui.modular.lib.Constraints;
+import codechicken.lib.gui.modular.lib.GuiRender;
 import codechicken.lib.gui.modular.lib.TextState;
 import codechicken.lib.gui.modular.lib.geometry.*;
 import codechicken.lib.math.MathHelper;
@@ -579,7 +580,8 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
         }
 
         @Override
-        public void renderBehind(GuiGraphicsExtractor render, double mouseX, double mouseY, float partialTicks) {
+        public void renderBehind(GuiGraphicsExtractor graphics, double mouseX, double mouseY, float partialTicks) {
+            GuiRender render = GuiRender.convert(graphics);
             double state = this.state.get();
             if (state > 0) {
                 RenderUtils.drawPieProgress(render, xMin(), yMin(), Math.min(xSize(), ySize()), state, 0, 0xFFFF0000, 0xFF000000);
