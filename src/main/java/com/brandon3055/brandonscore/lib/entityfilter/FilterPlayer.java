@@ -2,11 +2,11 @@ package com.brandon3055.brandonscore.lib.entityfilter;
 
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -74,7 +74,7 @@ public class FilterPlayer extends FilterBase {
         }
         MinecraftServer server = player.level().getServer();
         if (server != null){
-            GameProfile profile = server.getProfileCache().get(playerName).orElse(null);
+            NameAndId profile = server.services().nameToIdCache().get(playerName).orElse(null);
             if (profile != null) {
                 playerUUID = profile.id().toString();
                 return player.getUUID().toString().equals(playerUUID);

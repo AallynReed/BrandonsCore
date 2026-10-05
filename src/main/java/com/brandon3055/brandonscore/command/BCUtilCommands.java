@@ -50,7 +50,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.server.players.NameAndId;
+import net.minecraft.server.players.UserNameToIdResolver;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -555,7 +556,7 @@ public class BCUtilCommands {
 
 
     private static int playerAccess(CommandSourceStack source, String target) throws  CommandSyntaxException {
-        GameProfileCache cache = source.getServer().getProfileCache();
+        UserNameToIdResolver cache = source.getServer().services().nameToIdCache();
 //
 //        File playersFolder = new File(source.getServer().getWorld(DimensionType.OVERWORLD).getSaveHandler().getWorldDirectory(), "playerdata");
 //        File[] playerArray = playersFolder.listFiles((dir, name) -> name.endsWith(".dat"));
@@ -614,7 +615,7 @@ public class BCUtilCommands {
         }
         target = target.toLowerCase(Locale.ENGLISH);
 
-        GameProfile profile = null;
+        NameAndId profile = null;
         if (cache.get(target).isPresent()) {
             profile = cache.get(target).get();
             target = profile.id().toString();
