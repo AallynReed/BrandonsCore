@@ -55,6 +55,7 @@ import net.minecraft.server.players.UserNameToIdResolver;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.Util;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -64,12 +65,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.EventBus;
 import net.neoforged.bus.api.Event;
@@ -470,9 +472,10 @@ public class BCUtilCommands {
             return 1;
         }
 
-        ItemStack spawnEgg = new ItemStack(SpawnEggItem.byId(entity.getType()));
-        CompoundTag data = new CompoundTag();
-        entity.save(data);
+        ItemStack spawnEgg = SpawnEggItem.byId(entity.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
+        TagValueOutput output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, player.registryAccess());
+        entity.save(output);
+        CompoundTag data = output.buildResult();
 //        data.putString("id", String.valueOf(EntityList.getKey(entity)));
 
         data.remove("Pos");
@@ -488,7 +491,7 @@ public class BCUtilCommands {
         data.remove("UUID");
 
 //        spawnEgg.addTagElement("EntityTag", data);
-        spawnEgg.set(DataComponents.ENTITY_DATA, CustomData.of(data)); //TODO, Test Eggify
+        spawnEgg.set(DataComponents.ENTITY_DATA, TypedEntityData.of(entity.getType(), data)); //TODO, Test Eggify
 
         InventoryUtils.givePlayerStack(player, spawnEgg);
         return 0;
