@@ -96,7 +96,7 @@ public class HudManager {
     private static void onLoadComplete(FMLLoadCompleteEvent event) {
         hudElements.clear();
         for (Identifier key : HUD_REGISTRY.keySet()) {
-            hudElements.put(key, HUD_REGISTRY.get(key));
+            hudElements.put(key, HUD_REGISTRY.getValue(key));
         }
         HudData.loadSettings();
     }
