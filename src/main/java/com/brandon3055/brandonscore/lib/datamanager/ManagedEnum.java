@@ -120,7 +120,7 @@ public class ManagedEnum<T extends Enum<T>> extends AbstractManagedData<T> {
             if (nbt.contains("null")) {
                 value = null;
             } else {
-                value = indexToValue.get(MathHelper.clip(nbt.getByte("value") & 0xFF, 0, indexToValue.size() - 1));
+                value = indexToValue.get(MathHelper.clip(nbt.getByteOr("value", (byte) 0) & 0xFF, 0, indexToValue.size() - 1));
             }
         }
         notifyListeners(value);
