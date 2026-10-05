@@ -319,9 +319,7 @@ public class BlockBCore extends Block implements IBCoreBlock {
     }
 
     @OnlyIn (Dist.CLIENT)
-    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, context, tooltip, flagIn);
         if (stack.has(BC_TILE_DATA_TAG)) {
             tooltip.add(Component.translatable("info.brandonscore.block_has_saved_data"));
         }
