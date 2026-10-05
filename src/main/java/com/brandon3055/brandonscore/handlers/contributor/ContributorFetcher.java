@@ -149,7 +149,7 @@ public class ContributorFetcher {
     }
 
     public void linkUser(Player player, String linkCode, Consumer<Integer> callback) {
-        if (!isOnline(player.getUUID(), player.getGameProfile().getName())) {
+        if (!isOnline(player.getUUID(), player.getGameProfile().name())) {
             player.sendSystemMessage(Component.literal("You must be playing in online mode to link your account.").withStyle(ChatFormatting.RED));
         } else {
             queTask(new LinkTask(player.getUUID(), linkCode, callback));

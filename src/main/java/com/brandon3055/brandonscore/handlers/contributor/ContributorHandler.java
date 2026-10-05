@@ -85,7 +85,7 @@ public class ContributorHandler {
      * @see #getProps(UUID, String)
      */
     public static ContributorProperties getProps(Player player) {
-        return getProps(player.getUUID(), player.getGameProfile().getName());
+        return getProps(player.getUUID(), player.getGameProfile().name());
     }
 
     /**

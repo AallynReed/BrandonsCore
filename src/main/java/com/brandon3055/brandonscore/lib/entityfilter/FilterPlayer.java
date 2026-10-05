@@ -67,7 +67,7 @@ public class FilterPlayer extends FilterBase {
 
     private boolean isPlayerMatch(Player player) {
         if (!(player instanceof ServerPlayer)) {
-            return player.getGameProfile().getName().equalsIgnoreCase(playerName);
+            return player.getGameProfile().name().equalsIgnoreCase(playerName);
         }
         else if (!playerUUID.isEmpty()) {
             return player.getUUID().toString().equals(playerUUID);
@@ -76,11 +76,11 @@ public class FilterPlayer extends FilterBase {
         if (server != null){
             GameProfile profile = server.getProfileCache().get(playerName).orElse(null);
             if (profile != null) {
-                playerUUID = profile.getId().toString();
+                playerUUID = profile.id().toString();
                 return player.getUUID().toString().equals(playerUUID);
             }
         }
-        return player.getGameProfile().getName().equalsIgnoreCase(playerName);
+        return player.getGameProfile().name().equalsIgnoreCase(playerName);
     }
 
     @Override

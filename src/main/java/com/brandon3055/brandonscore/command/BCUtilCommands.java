@@ -587,15 +587,15 @@ public class BCUtilCommands {
 
                 boolean online = false;
                 for (Player player : source.getServer().getPlayerList().getPlayers()) {
-                    if (player.getGameProfile().getId().equals(uuid)) {
+                    if (player.getGameProfile().id().equals(uuid)) {
                         online = true;
                         break;
                     }
                 }
 
-                MutableComponent message = Component.literal((online ? ChatFormatting.GREEN + "[Online]: " : ChatFormatting.GRAY + "[Offline]: ") + profile.getName());
+                MutableComponent message = Component.literal((online ? ChatFormatting.GREEN + "[Online]: " : ChatFormatting.GRAY + "[Offline]: ") + profile.name());
 
-                boolean offline = UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8)).equals(uuid);
+                boolean offline = UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.name()).getBytes(Charsets.UTF_8)).equals(uuid);
                 if (offline) {
                     message.append(Component.literal(" (Offline Account)").withStyle(ChatFormatting.RED));
                 }
@@ -617,7 +617,7 @@ public class BCUtilCommands {
         GameProfile profile = null;
         if (cache.get(target).isPresent()) {
             profile = cache.get(target).get();
-            target = profile.getId().toString();
+            target = profile.id().toString();
         } else {
             try {
                 profile = cache.get(UUID.fromString(target)).orElse(null);
@@ -631,7 +631,7 @@ public class BCUtilCommands {
 
         //Access Player
         ServerPlayer playerSender = source.getPlayerOrException();
-        Player targetPlayer = source.getServer().getPlayerList().getPlayer(profile.getId());
+        Player targetPlayer = source.getServer().getPlayerList().getPlayer(profile.id());
         if (targetPlayer == null) {
             File playerFile = getPlayerFile(source.getServer(), target);
 //            targetPlayer = new OfflinePlayer(playerSender, source.getServer().getWorld(World.OVERWORLD), profile, playerFile);
