@@ -88,7 +88,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import static net.minecraft.network.chat.HoverEvent.Action.SHOW_TEXT;
 
 ;
 
@@ -288,7 +287,7 @@ public class BCUtilCommands {
         String returnString = StringyStacks.toString(stack, nbt, count, caps, player.registryAccess());
         ChatHelper.sendMessage(player, Component.literal("# The following is stack string for the held stack (click to copy) #").withStyle(ChatFormatting.BLUE));
         MutableComponent textComponent = returnString.length() > 64 ? Component.literal(returnString.substring(0, 64) + "... ").withStyle(ChatFormatting.GOLD).append(Component.literal("(Mouseover for full)").withStyle(ChatFormatting.DARK_AQUA).withStyle(ChatFormatting.UNDERLINE)) : Component.literal(returnString).withStyle(ChatFormatting.GOLD);
-        textComponent.setStyle(textComponent.getStyle().withHoverEvent(new HoverEvent(SHOW_TEXT, Component.literal("Click to copy to clipboard").withStyle(ChatFormatting.BLUE).append(Component.literal("\n" + returnString).withStyle(ChatFormatting.GRAY)))).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, returnString)));
+        textComponent.setStyle(textComponent.getStyle().withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to copy to clipboard").withStyle(ChatFormatting.BLUE).append(Component.literal("\n" + returnString).withStyle(ChatFormatting.GRAY)))).withClickEvent(new ClickEvent.CopyToClipboard(returnString)));
         ChatHelper.sendMessage(player, textComponent);
         StringyStacks.LOGGER.info(returnString);
         return 0;
@@ -388,8 +387,8 @@ public class BCUtilCommands {
 
     private static int getUUID(CommandSourceStack source, ServerPlayer player) {
         MutableComponent comp = Component.literal(player.getName().getString() + "'s UUID: " + ChatFormatting.UNDERLINE + player.getUUID());
-        comp.setStyle(comp.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, player.getUUID().toString())));
-        comp.setStyle(comp.getStyle().withHoverEvent(new HoverEvent(SHOW_TEXT, Component.literal("Click to copy to clipboard"))));
+        comp.setStyle(comp.getStyle().withClickEvent(new ClickEvent.CopyToClipboard(player.getUUID().toString())));
+        comp.setStyle(comp.getStyle().withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to copy to clipboard"))));
         source.sendSuccess(() -> comp, true);
         return 0;
     }
@@ -606,8 +605,8 @@ public class BCUtilCommands {
                         .append(Component.literal(ChatFormatting.GOLD + "-Click to access player."));
 
                 Style msgStyle = Style.EMPTY;
-                msgStyle.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/bcore_util player_access " + uuid));
-                msgStyle.withHoverEvent(new HoverEvent(SHOW_TEXT, messageHover));
+                msgStyle.withClickEvent(new ClickEvent.SuggestCommand("/bcore_util player_access " + uuid));
+                msgStyle.withHoverEvent(new HoverEvent.ShowText(messageHover));
                 message.setStyle(msgStyle);
                 source.sendSuccess(() -> message, false);
             }

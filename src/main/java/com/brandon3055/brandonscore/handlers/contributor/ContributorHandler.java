@@ -183,8 +183,8 @@ public class ContributorHandler {
 
         MutableComponent configCommand = Component.literal("/bcore_client contributor").withStyle(BLUE);
         configCommand.setStyle(configCommand.getStyle()
-                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/bcore_client contributor"))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to run command"))));
+                .withClickEvent(new ClickEvent.SuggestCommand("/bcore_client contributor"))
+                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to run command"))));
         player.sendSystemMessage(Component.literal("Run ")
                 .append(configCommand)
                 .append(Component.literal(" to access contributor settings.")));

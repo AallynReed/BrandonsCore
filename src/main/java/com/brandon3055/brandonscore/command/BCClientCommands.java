@@ -18,6 +18,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Player;
 
 import static net.minecraft.ChatFormatting.*;
+import java.net.URI;
 
 /**
  * Created by brandon3055 on 23/06/2017.
@@ -79,13 +80,13 @@ public class BCClientCommands {
                         player.sendSystemMessage(Component.literal("Contributor perks are purely aesthetic features offered to those who support Draconic Evolution.").withStyle(GREEN));
                         player.sendSystemMessage(Component.literal("You can find more information on my patreon page: ").withStyle(GREEN));
                         MutableComponent link = Component.literal("www.patreon.com/brandon3055").setStyle(Style.EMPTY
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.patreon.com/brandon3055"))
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to open or copy link"))));
+                                .withClickEvent(new ClickEvent.OpenUrl(URI.create("https://www.patreon.com/brandon3055")))
+                                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to open or copy link"))));
                         player.sendSystemMessage(link.withStyle(BLUE, UNDERLINE));
                         player.sendSystemMessage(Component.literal(""));
                         MutableComponent notLinked = Component.literal("Please Click Here").setStyle(Style.EMPTY
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/bcore_client contributor help"))
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click for help"))));
+                                .withClickEvent(new ClickEvent.SuggestCommand("/bcore_client contributor help"))
+                                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click for help"))));
                         player.sendSystemMessage(Component.literal("Already a contributor? ").withStyle(LIGHT_PURPLE).append(notLinked.withStyle(BLUE)));
                         return 0;
                     }
@@ -102,8 +103,8 @@ public class BCClientCommands {
                                     "If you are playing in offline mode your contributor status can not be verified. " +
                                     "Or your client might not be able to contact the contributor API for some reason.").withStyle(GRAY));
                             MutableComponent link = Component.literal("DE Discord").setStyle(Style.EMPTY
-                                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/e2HBEtF"))
-                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to open or copy link"))));
+                                    .withClickEvent(new ClickEvent.OpenUrl(URI.create("https://discord.gg/e2HBEtF")))
+                                    .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to open or copy link"))));
                             player.sendSystemMessage(Component.literal("If you need help you can request assistance via the ").withStyle(GREEN).append(link.withStyle(BLUE, UNDERLINE)));
                             return 0;
                         })
