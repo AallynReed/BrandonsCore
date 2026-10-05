@@ -16,10 +16,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.covers1624.quack.collection.FastStream;
 import net.covers1624.quack.util.SneakyUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -224,7 +226,7 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
                     if (name == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(name)) {
                         return Collections.singletonList(Component.translatable("mod_gui.brandonscore.entity_filter.entity_type.unknown").withStyle(ChatFormatting.RED));
                     }
-                    EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(name);
+                    EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getValue(name);
                     return List.of(type.getDescription().copy(), Component.literal(name.getNamespace()).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC));
                 })
                 .setMaxLength(1024)
@@ -282,7 +284,7 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
                         .stream()
                         .filter(e -> {
                             try {
-                                return e.create(mc().level) instanceof ILivingEntityExtension;
+                                return e.create(mc().level, EntitySpawnReason.LOAD) instanceof ILivingEntityExtension;
                             } catch (Throwable ex) {
                                 return false;
                             }
@@ -409,7 +411,7 @@ public class GuiEntityFilter extends GuiElement<GuiEntityFilter> {
                     });
 
             dialog.setSearchStringFunc(tag -> String.valueOf(tag.location()));
-            dialog.addItems(BuiltInRegistries.ITEM.getTagNames().toList());
+            dialog.addItems(BuiltInRegistries.ITEM.getTags().map(HolderSet.Named::key).toList());
             dialog.getList().markDirty();
         });
     }
