@@ -49,9 +49,9 @@ public interface EquippedModelItem {
      */
     static void setPartVisibility(HumanoidModel<?> model, @Nullable EquipmentSlot slot) {
         if (slot == null) {
-            model.setAllVisible(true);
+            setAllVisible(model, true);
         } else {
-            model.setAllVisible(false);
+            setAllVisible(model, false);
             switch (slot) {
                 case HEAD:
                     model.head.visible = true;
@@ -74,4 +74,13 @@ public interface EquippedModelItem {
         }
     }
 
+    private static void setAllVisible(HumanoidModel<?> model, boolean visible) {
+        model.head.visible = visible;
+        model.hat.visible = visible;
+        model.body.visible = visible;
+        model.rightArm.visible = visible;
+        model.leftArm.visible = visible;
+        model.rightLeg.visible = visible;
+        model.leftLeg.visible = visible;
+    }
 }
