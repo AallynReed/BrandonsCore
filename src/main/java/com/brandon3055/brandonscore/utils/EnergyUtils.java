@@ -33,7 +33,7 @@ public class EnergyUtils {
     // ================= Get Storage =================
 
     public static IOPStorage getStorage(BlockEntity tile, Direction side) {
-        if (tile.getLevel().isClientSide) {
+        if (tile.getLevel().isClientSide()) {
             return null;
         }
 

@@ -95,7 +95,7 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
      * will see incorrect values until the next sync.
      */
     public void forceContainerSync(List<ContainerListener> listeners) {
-        if (!tile.getLevel().isClientSide) {
+        if (!tile.getLevel().isClientSide()) {
             for (IManagedData data : managedDataList) {
                 if (data.flags().syncContainer) {
                     PacketCustom syncPacket = createSyncPacket();
@@ -108,7 +108,7 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
     }
 
     public void forceSync() {
-        if (!tile.getLevel().isClientSide) {
+        if (!tile.getLevel().isClientSide()) {
             for (IManagedData data : managedDataList) {
                 if (data.flags().syncTile) {
                     PacketCustom syncPacket = createSyncPacket();
@@ -121,7 +121,7 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
     }
 
     public void forcePlayerSync(ServerPlayer player) {
-        if (!tile.getLevel().isClientSide) {
+        if (!tile.getLevel().isClientSide()) {
             for (IManagedData data : managedDataList) {
                 if (data.flags().syncContainer) {
                     PacketCustom syncPacket = createSyncPacket();
@@ -134,7 +134,7 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
     }
 
     public void forceSync(IManagedData data) {
-        if (!tile.getLevel().isClientSide) {
+        if (!tile.getLevel().isClientSide()) {
             PacketCustom syncPacket = createSyncPacket();
             syncPacket.writeByte((byte) data.getIndex());
             data.toBytes(syncPacket);
@@ -189,7 +189,7 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
 
     @Override
     public void markDirty() {
-        if (tile.getLevel() != null && !tile.getLevel().isClientSide) {
+        if (tile.getLevel() != null && !tile.getLevel().isClientSide()) {
             if (maxSaveInterval == 0){
                 tile.setChanged();
             } else if (TimeKeeper.getServerTick() > lastDirty + maxSaveInterval) {
@@ -211,12 +211,12 @@ public class TileDataManager<T extends BlockEntity & IDataManagerProvider> imple
 
     @Override
     public boolean isClientSide() {
-        return tile.hasLevel() && tile.getLevel().isClientSide;
+        return tile.hasLevel() && tile.getLevel().isClientSide();
     }
 
     @Override
     public void sendToServer(IManagedData data) {
-        if (tile.getLevel().isClientSide && data.flags().allowClientControl) {
+        if (tile.getLevel().isClientSide() && data.flags().allowClientControl) {
             Player player = BrandonsCore.proxy.getClientPlayer();
             if (player != null) {
                 AbstractContainerMenu container = player.containerMenu;

@@ -120,7 +120,7 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
     }
 
     public void detectAndSendChanges(boolean containerListeners) {
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             if (containerListeners) {
                 dataManager.detectAndSendChangesToListeners(getAccessingPlayers());
                 capManager.detectAndSendChangesToListeners(getAccessingPlayers());
