@@ -2,8 +2,6 @@ package com.brandon3055.brandonscore.client.particle;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -21,6 +19,10 @@ public class BCParticle extends Particle {
     protected float texturesPerRow = 16F;
     protected float airResistance = 0;
     protected float baseScale = 1;
+    protected float rCol = 1.0F;
+    protected float gCol = 1.0F;
+    protected float bCol = 1.0F;
+    protected float alpha = 1.0F;
 
     public BCParticle(ClientLevel worldIn, Vec3 pos) {
         super(worldIn, pos.x, pos.y, pos.z);
@@ -60,8 +62,18 @@ public class BCParticle extends Particle {
 
 
     public BCParticle setColour(float red, float green, float blue) {
-        super.setColor(red, green, blue);
+        setColor(red, green, blue);
         return this;
+    }
+
+    public void setColor(float red, float green, float blue) {
+        this.rCol = red;
+        this.gCol = green;
+        this.bCol = blue;
+    }
+
+    protected void setAlpha(float alpha) {
+        this.alpha = alpha;
     }
 
     public BCParticle setMaxAge(int age, int randAdditive) {
@@ -111,12 +123,7 @@ public class BCParticle extends Particle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-
-    }
-
-    @Override
-    public ParticleRenderType getRenderType() {
+    public ParticleRenderType getGroup() {
         return null;
     }
 
