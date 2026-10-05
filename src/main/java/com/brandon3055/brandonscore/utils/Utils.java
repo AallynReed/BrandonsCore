@@ -551,7 +551,7 @@ public class Utils {
 
     @Deprecated
     public static <T> T unsafeRunForDist(Supplier<Supplier<T>> clientTarget, Supplier<Supplier<T>> serverTarget) {
-        switch (FMLEnvironment.dist) {
+        switch (FMLEnvironment.getDist()) {
             case CLIENT:
                 return clientTarget.get().get();
             case DEDICATED_SERVER:
@@ -563,14 +563,14 @@ public class Utils {
 
     @Deprecated
     public static void unsafeRunWhenOn(Dist dist, Supplier<Runnable> toRun) {
-        if (dist == FMLEnvironment.dist) {
+        if (dist == FMLEnvironment.getDist()) {
             toRun.get().run();
         }
     }
 
     @Deprecated
     public static <T> T unsafeCallWhenOn(Dist dist, Supplier<Callable<T>> toRun) {
-        if (dist == FMLEnvironment.dist) {
+        if (dist == FMLEnvironment.getDist()) {
             try {
                 return toRun.get().call();
             } catch (Exception e) {
