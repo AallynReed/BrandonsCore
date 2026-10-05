@@ -38,8 +38,8 @@ public class PropertyString extends Property<String> {
 
     @Nonnull
     @Override
-    public Collection<String> getPossibleValues() {
-        return Collections.unmodifiableSet(valuesSet);
+    public List<String> getPossibleValues() {
+        return Collections.unmodifiableList(Arrays.asList(metaLookup));
     }
 
     @Nonnull
@@ -55,6 +55,11 @@ public class PropertyString extends Property<String> {
     @Override
     public String getName(@Nonnull String value) {
         return value.intern();
+    }
+
+    @Override
+    public int getInternalIndex(String value) {
+        return toMeta(value);
     }
 
     public int toMeta(String value) {
