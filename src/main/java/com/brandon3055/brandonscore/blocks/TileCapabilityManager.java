@@ -5,6 +5,7 @@ import codechicken.lib.packet.PacketCustom;
 import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
 import com.brandon3055.brandonscore.capability.OPWrappers;
+import com.brandon3055.brandonscore.inventory.ItemHandlerWrapper;
 import com.brandon3055.brandonscore.lib.IMCDataSerializable;
 import com.brandon3055.brandonscore.lib.INBTSerializable;
 import com.brandon3055.brandonscore.network.BCoreNetwork;
@@ -16,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -155,6 +157,9 @@ public class TileCapabilityManager {
         if (map != null && map.containsKey(side)) {
             T capOnSide = (T) map.get(side);
             if (capSideValidator.getOrDefault(capOnSide, d -> true).test(side)) {
+                if (cap == Capabilities.Item.BLOCK && capOnSide instanceof IItemHandler handler) {
+                    return (T) ItemHandlerWrapper.of(handler);
+                }
                 return capOnSide;
             }
         }
