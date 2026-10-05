@@ -265,7 +265,7 @@ public class TileBCore extends BlockEntity implements IDataManagerProvider, IDat
 
     public void dirtyBlock() {
         LevelChunk chunk = level.getChunkAt(getBlockPos());
-        chunk.setUnsaved(true);
+        chunk.markUnsaved();
     }
 
     /**
