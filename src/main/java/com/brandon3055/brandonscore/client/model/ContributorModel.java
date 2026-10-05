@@ -108,9 +108,9 @@ public class ContributorModel<T extends LivingEntity> extends HumanoidModel<T> i
         f3Bone = new WingBoneRenderer(f3, new Vector3(-1.5, 31, 2.8), true);
         f3Bone.shell = new WingBoneRenderer(f3Shell, Vector3.ZERO, false);
 
-        chestpiece1 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:wyvern_chestpiece"));
-        chestpiece2 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:draconic_chestpiece"));
-        chestpiece3 = BuiltInRegistries.ITEM.get(Identifier.parse("draconicevolution:chaotic_chestpiece"));
+        chestpiece1 = BuiltInRegistries.ITEM.getValue(Identifier.parse("draconicevolution:wyvern_chestpiece"));
+        chestpiece2 = BuiltInRegistries.ITEM.getValue(Identifier.parse("draconicevolution:draconic_chestpiece"));
+        chestpiece3 = BuiltInRegistries.ITEM.getValue(Identifier.parse("draconicevolution:chaotic_chestpiece"));
     }
 
     @Override

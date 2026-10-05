@@ -239,8 +239,8 @@ public class StringyStacks {
         }
 
         Identifier registryName = Identifier.parse(stackString);
-        Item item = BuiltInRegistries.ITEM.get(registryName);
-        Block block = BuiltInRegistries.BLOCK.get(registryName);
+        Item item = BuiltInRegistries.ITEM.getValue(registryName);
+        Block block = BuiltInRegistries.BLOCK.getValue(registryName);
         if (item == Items.AIR && block == Blocks.AIR) {
             return defaultIfInputInvalid;
         } else {
@@ -315,8 +315,8 @@ public class StringyStacks {
     public static ItemStack legacyStackConverter(String itemString, int count, int damage, @Nullable CompoundTag nbt) {
         try {
             Identifier itemID = Identifier.parse(itemString);
-            Item item = BuiltInRegistries.ITEM.get(itemID);
-            Block block = BuiltInRegistries.BLOCK.get(itemID);
+            Item item = BuiltInRegistries.ITEM.getValue(itemID);
+            Block block = BuiltInRegistries.BLOCK.getValue(itemID);
             if (item == Items.AIR && block == Blocks.AIR) {
                 return ItemStack.EMPTY;
             } else {

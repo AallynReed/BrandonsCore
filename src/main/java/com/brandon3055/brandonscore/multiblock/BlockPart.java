@@ -20,7 +20,7 @@ public class BlockPart implements MultiBlockPart {
         if (!BuiltInRegistries.BLOCK.containsKey(id)) {
             throw new IllegalStateException("Specified block could not be found: " + id);
         }
-        this.block = BuiltInRegistries.BLOCK.get(id);
+        this.block = BuiltInRegistries.BLOCK.getValue(id);
     }
 
     @Override
