@@ -5,8 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -18,7 +16,6 @@ import java.util.List;
  */
 public interface IHudDisplay {
     
-    @OnlyIn (Dist.CLIENT)
     default double computeHudWidth(Minecraft mc, List<Component> displayList) {
         double maxWidth = 0;
         for (Component text : displayList) {
@@ -27,17 +24,14 @@ public interface IHudDisplay {
         return maxWidth + 8;
     }
 
-    @OnlyIn(Dist.CLIENT)
     default double computeHudHeight(Minecraft mc, List<Component> displayList) {
         return (displayList.size() * 10) + 6;
     }
 
-    @OnlyIn(Dist.CLIENT)
     default void renderHudBackground(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
         render.cc$tooltipBackground(0, 0, width, height, 0xF0100010, 0xF0100010, 0x505000FF, 0x5028007f, false);
     }
 
-    @OnlyIn(Dist.CLIENT)
     default void renderHudContent(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
         render.pose().translate(4, 4);
         for (Component text : displayList) {

@@ -16,8 +16,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -151,7 +149,6 @@ public class ContainerPlayerAccess extends AbstractContainerMenu {
         }
 
         @Nullable
-        @OnlyIn (Dist.CLIENT)
         public String getSlotTexture() {
 //            return PlayerContainer.ARMOR_SLOT_TEXTURES[eSlot.getIndex()];
             return InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS.toString();//TODO ARMOR_SLOT_TEXTURES[eSlot.getIndex()];
@@ -164,7 +161,6 @@ public class ContainerPlayerAccess extends AbstractContainerMenu {
         }
 
         @Nullable
-        @OnlyIn(Dist.CLIENT)
         public String getSlotTexture() {
             return "minecraft:items/empty_armor_slot_shield";
         }

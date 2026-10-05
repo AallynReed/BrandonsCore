@@ -31,8 +31,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 
 import javax.annotation.Nullable;
@@ -318,14 +316,12 @@ public class BlockBCore extends Block implements IBCoreBlock {
         }
     }
 
-    @OnlyIn (Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         if (stack.has(BC_TILE_DATA_TAG)) {
             tooltip.add(Component.translatable("info.brandonscore.block_has_saved_data"));
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean renderSelectionBox(ExtractBlockOutlineRenderStateEvent event, Level level) {
         return true;
     }
