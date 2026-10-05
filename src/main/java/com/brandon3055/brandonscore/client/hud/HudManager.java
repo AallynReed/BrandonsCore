@@ -1,13 +1,12 @@
 package com.brandon3055.brandonscore.client.hud;
 
-import codechicken.lib.gui.modular.lib.GuiRender;
 import com.brandon3055.brandonscore.api.hud.AbstractHudElement;
 import com.brandon3055.brandonscore.api.math.Vector2;
 import com.brandon3055.brandonscore.client.gui.HudConfigGui;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.covers1624.quack.util.CrashLock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -51,28 +50,27 @@ public class HudManager {
         if (event.isCanceled()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) return;
-        GuiRender render = GuiRender.convert(event.getGuiGraphics());
+        GuiGraphicsExtractor render = event.getGuiGraphics();
         boolean configuring = mc.screen instanceof HudConfigGui.Screen;
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F); //Fixes broken hud when underwater
         for (AbstractHudElement element : hudElements.values()) {
             if (element.shouldRender(true)) {
-                render.pose().pushPose();
+                render.pose().pushMatrix();
                 element.render(render, event.getPartialTick().getGameTimeDeltaPartialTick(false), configuring);
-                render.pose().popPose();
+                render.pose().popMatrix();
             }
         }
     }
 
     public static void onDrawOverlayPost(RenderGuiEvent.Post event) {
-        GuiRender render = GuiRender.convert(event.getGuiGraphics());
+        GuiGraphicsExtractor render = event.getGuiGraphics();
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) return;
         boolean configuring = mc.screen instanceof HudConfigGui.Screen;
         for (AbstractHudElement element : hudElements.values()) {
             if (element.shouldRender(false)) {
-                render.pose().pushPose();
+                render.pose().pushMatrix();
                 element.render(render, event.getPartialTick().getGameTimeDeltaPartialTick(false), configuring);
-                render.pose().popPose();
+                render.pose().popMatrix();
             }
         }
     }

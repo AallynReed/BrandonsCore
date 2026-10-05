@@ -1,9 +1,9 @@
 package com.brandon3055.brandonscore.api.hud;
 
-import codechicken.lib.gui.modular.lib.GuiRender;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -33,16 +33,16 @@ public interface IHudDisplay {
     }
 
     @OnlyIn(Dist.CLIENT)
-    default void renderHudBackground(GuiRender render, double width, double height, List<Component> displayList) {
-        render.toolTipBackground(0, 0, width, height);
+    default void renderHudBackground(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
+        render.cc$tooltipBackground(0, 0, width, height, 0xF0100010, 0xF0100010, 0x505000FF, 0x5028007f, false);
     }
 
     @OnlyIn(Dist.CLIENT)
-    default void renderHudContent(GuiRender render, double width, double height, List<Component> displayList) {
-        render.pose().translate(4, 4, 0);
+    default void renderHudContent(GuiGraphicsExtractor render, double width, double height, List<Component> displayList) {
+        render.pose().translate(4, 4);
         for (Component text : displayList) {
-            render.drawString(text, 0, 0, 0xFFFFFF, true);
-            render.pose().translate(0, 10, 0);
+            render.cc$drawString(Minecraft.getInstance().font, text, 0, 0, 0xFFFFFF, true);
+            render.pose().translate(0, 10);
         }
     }
 }
